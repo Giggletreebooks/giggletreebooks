@@ -1,0 +1,65 @@
+import Image from "next/image";
+import Link from "next/link";
+import { LogoWatermark } from "@/app/components/Logo";
+import { type Book } from "@/app/lib/books";
+import { slugTint, tintInk, tintSurface } from "@/app/lib/tint";
+
+export default function BookCard({ book }: { book: Book }) {
+  const tint = slugTint(book.seriesSlug);
+
+  return (
+    /* Not a <Link> wrapper: the title link is stretched over the whole card so
+       the "View Book" affordance stays decorative and nothing nests. */
+    <article className="group relative flex w-full flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-all duration-200 hover:-translate-y-1 hover:border-brand hover:shadow-[0_20px_40px_-24px_rgb(59_28_0_/_0.45)] focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-brand motion-reduce:hover:translate-y-0">
+      <div
+        className="relative flex aspect-3/4 items-center justify-center overflow-hidden"
+        style={{ backgroundColor: tintSurface(tint) }}
+      >
+        {book.coverImage ? (
+          <Image
+            src={book.coverImage}
+            alt={`Cover of ${book.title}`}
+            fill
+            sizes="(min-width: 1280px) 17rem, (min-width: 1024px) 21rem, (min-width: 640px) 45vw, 92vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-105 motion-reduce:group-hover:scale-100"
+          />
+        ) : (
+          /* Stands in until cover artwork lands. */
+          <>
+            <LogoWatermark className="absolute -right-10 -bottom-12 h-44 w-auto opacity-[0.08]" />
+            <span
+              aria-hidden
+              className="px-6 text-center font-display text-xl leading-tight font-semibold tracking-tight break-words text-balance sm:text-2xl"
+              style={{ color: tintInk(tint) }}
+            >
+              {book.title}
+            </span>
+          </>
+        )}
+      </div>
+
+      <div className="flex flex-1 flex-col p-6">
+        <p className="text-xs font-medium tracking-wide text-accent uppercase">
+          {book.ageRange}
+        </p>
+        <h3 className="mt-2 font-display text-lg font-semibold tracking-tight break-words transition-colors group-hover:text-brand sm:text-xl">
+          <Link
+            href={`/books/${book.seriesSlug}/${book.slug}`}
+            className="outline-none after:absolute after:inset-0"
+          >
+            {book.title}
+          </Link>
+        </h3>
+        <p className="mt-2 mb-5 text-sm leading-relaxed text-muted text-pretty">
+          {book.description}
+        </p>
+        <span
+          aria-hidden
+          className="mt-auto inline-flex h-11 w-fit items-center justify-center rounded-full border border-border px-6 text-sm font-semibold transition-colors duration-200 group-hover:border-brand group-hover:bg-brand group-hover:text-background"
+        >
+          View Book
+        </span>
+      </div>
+    </article>
+  );
+}
