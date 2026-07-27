@@ -1,4 +1,5 @@
-import { bookCoverPath, slugify } from "@/app/lib/covers";
+import { resolveCover, slugify } from "@/app/lib/covers";
+import { coverDirFor } from "@/app/lib/series-seed";
 
 export type Book = {
   /** Derived from the title — also the URL segment. */
@@ -60,7 +61,11 @@ export async function getBooks(): Promise<Book[]> {
   return SEED.map((seed) => ({
     ...seed,
     slug: slugify(seed.title),
-    coverImage: bookCoverPath(seed.seriesSlug, seed.title),
+    coverImage: resolveCover(
+      coverDirFor(seed.seriesSlug),
+      seed.title,
+      `book "${seed.title}" (${seed.seriesSlug})`,
+    ),
   }));
 }
 
