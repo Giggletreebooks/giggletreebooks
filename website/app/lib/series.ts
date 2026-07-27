@@ -19,7 +19,7 @@ export type Series = {
   learnings?: Learning[];
   /** Derived from the books that belong to this series — never hand-set. */
   bookCount: number;
-  /** Public path to a cover image. Absent until artwork exists. */
+  /** The first book's cover stands in as the series image. */
   coverImage?: string;
 };
 
@@ -150,10 +150,14 @@ const PLACEHOLDER: SeriesSeed[] = [
 export async function getSeries(): Promise<Series[]> {
   const books = await getBooks();
 
-  return PLACEHOLDER.map((seed) => ({
-    ...seed,
-    bookCount: books.filter((book) => book.seriesSlug === seed.slug).length,
-  }));
+  return PLACEHOLDER.map((seed) => {
+    const own = books.filter((book) => book.seriesSlug === seed.slug);
+    return {
+      ...seed,
+      bookCount: own.length,
+      coverImage: seed.coverImage ?? own[0]?.coverImage,
+    };
+  });
 }
 
 export async function getSeriesBySlug(

@@ -11,7 +11,7 @@ export default function SeriesEmblem({ series }: { series: Series }) {
     <div className="relative">
       <div className="absolute inset-0 -rotate-3 rounded-[2rem] border border-border bg-brand-soft/60" />
       <div
-        className="relative flex aspect-square items-center justify-center overflow-hidden rounded-[2rem] border border-border shadow-[0_24px_60px_-32px_rgb(59_28_0_/_0.4)]"
+        className="relative flex aspect-4/3 items-center justify-center overflow-hidden rounded-[2rem] border border-border shadow-[0_24px_60px_-32px_rgb(59_28_0_/_0.4)]"
         style={{ backgroundColor: tintSurface(tint) }}
       >
         {series.coverImage ? (

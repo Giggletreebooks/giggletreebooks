@@ -12,7 +12,7 @@ export default function BookCard({ book }: { book: Book }) {
        the "View Book" affordance stays decorative and nothing nests. */
     <article className="group relative flex w-full flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-all duration-200 hover:-translate-y-1 hover:border-brand hover:shadow-[0_20px_40px_-24px_rgb(59_28_0_/_0.45)] focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-brand motion-reduce:hover:translate-y-0">
       <div
-        className="relative flex aspect-3/4 items-center justify-center overflow-hidden"
+        className="relative flex aspect-4/3 items-center justify-center overflow-hidden"
         style={{ backgroundColor: tintSurface(tint) }}
       >
         {book.coverImage ? (
@@ -39,10 +39,12 @@ export default function BookCard({ book }: { book: Book }) {
       </div>
 
       <div className="flex flex-1 flex-col p-6">
-        <p className="text-xs font-medium tracking-wide text-accent uppercase">
-          {book.ageRange}
-        </p>
-        <h3 className="mt-2 font-display text-lg font-semibold tracking-tight break-words transition-colors group-hover:text-brand sm:text-xl">
+        {book.ageRange && (
+          <p className="mb-2 text-xs font-medium tracking-wide text-accent uppercase">
+            {book.ageRange}
+          </p>
+        )}
+        <h3 className="font-display text-lg font-semibold tracking-tight break-words transition-colors group-hover:text-brand sm:text-xl">
           <Link
             href={`/books/${book.seriesSlug}/${book.slug}`}
             className="outline-none after:absolute after:inset-0"
@@ -50,9 +52,12 @@ export default function BookCard({ book }: { book: Book }) {
             {book.title}
           </Link>
         </h3>
-        <p className="mt-2 mb-5 text-sm leading-relaxed text-muted text-pretty">
-          {book.description}
-        </p>
+        {book.description && (
+          <p className="mt-2 text-sm leading-relaxed text-muted text-pretty">
+            {book.description}
+          </p>
+        )}
+        <div className="mb-5" />
         <span
           aria-hidden
           className="mt-auto inline-flex h-11 w-fit items-center justify-center rounded-full border border-border px-6 text-sm font-semibold transition-colors duration-200 group-hover:border-brand group-hover:bg-brand group-hover:text-background"

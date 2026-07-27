@@ -1,81 +1,55 @@
+import { bookCoverPath, slugify } from "@/app/lib/covers";
+
 export type Book = {
-  /** Folder name once scanning is wired up — also the URL segment. */
+  /** Derived from the title — also the URL segment. */
   slug: string;
   title: string;
-  /** Matches a `Series.slug`; drives the placeholder cover tint. */
+  /** Matches a `Series.slug`; also selects the cover folder. */
   seriesSlug: string;
-  ageRange: string;
-  description: string;
-  /** Public path to cover artwork. Absent until the file exists. */
+  /** Public path to cover artwork, resolved from the title. */
   coverImage?: string;
+  /** Not yet supplied for the real catalogue; cards omit it when absent. */
+  ageRange?: string;
+  description?: string;
 };
 
-const PLACEHOLDER: Book[] = [
-  {
-    slug: "the-morning-rooster",
-    title: "The Morning Rooster",
-    seriesSlug: "farm-animals",
-    ageRange: "3–5 years",
-    description:
-      "Someone has to wake the farm, and today it is not going smoothly.",
-  },
-  {
-    slug: "where-the-woolly-sheep-went",
-    title: "Where the Woolly Sheep Went",
-    seriesSlug: "farm-animals",
-    ageRange: "3–5 years",
-    description: "One gap in the hedge, and the whole flock has an opinion.",
-  },
-  {
-    slug: "duckling-counts-to-ten",
-    title: "Duckling Counts to Ten",
-    seriesSlug: "farm-animals",
-    ageRange: "2–4 years",
-    description: "A counting story that keeps losing track of number seven.",
-  },
-  {
-    slug: "the-barn-at-night",
-    title: "The Barn at Night",
-    seriesSlug: "farm-animals",
-    ageRange: "4–6 years",
-    description: "After the lights go out, the barn is not nearly as quiet.",
-  },
-  {
-    slug: "goat-on-the-roof",
-    title: "Goat on the Roof",
-    seriesSlug: "farm-animals",
-    ageRange: "3–6 years",
-    description: "Nobody knows how she got up there. She is not coming down.",
-  },
-  {
-    slug: "where-the-lions-nap",
-    title: "Where the Lions Nap",
-    seriesSlug: "wild-animals",
-    ageRange: "4–7 years",
-    description:
-      "A quiet afternoon on the savanna, told from the tall grass down.",
-  },
-  {
-    slug: "the-tallest-neck",
-    title: "The Tallest Neck",
-    seriesSlug: "wild-animals",
-    ageRange: "3–6 years",
-    description: "A young giraffe discovers the trouble with seeing everything.",
-  },
-  {
-    slug: "stripes-in-the-long-grass",
-    title: "Stripes in the Long Grass",
-    seriesSlug: "wild-animals",
-    ageRange: "4–7 years",
-    description: "Every zebra looks the same, until you know what to look for.",
-  },
-  {
-    slug: "the-elephant-who-remembered",
-    title: "The Elephant Who Remembered",
-    seriesSlug: "wild-animals",
-    ageRange: "5–8 years",
-    description: "A herd walks an old route, and the eldest leads from memory.",
-  },
+/**
+ * Title and series only — everything else is derived. Order matches the
+ * numbering on the master book folders. Adding a book is one line here plus
+ * dropping `<Title>.png` into the series' covers folder.
+ */
+type BookSeed = Pick<Book, "title" | "seriesSlug"> &
+  Partial<Pick<Book, "ageRange" | "description">>;
+
+const SEED: BookSeed[] = [
+  // Series 1 — Farm Animals
+  { title: "Henrietta the Chicken", seriesSlug: "farm-animals" },
+  { title: "Penelope the Pig", seriesSlug: "farm-animals" },
+  { title: "Clara the Cow", seriesSlug: "farm-animals" },
+  { title: "Sam the Sheep", seriesSlug: "farm-animals" },
+  { title: "Toby the Horse", seriesSlug: "farm-animals" },
+  { title: "Ducky the Duck", seriesSlug: "farm-animals" },
+  { title: "Gilbert the Goat", seriesSlug: "farm-animals" },
+  { title: "Whiskers the Barn Cat", seriesSlug: "farm-animals" },
+  { title: "Daisy the Dog", seriesSlug: "farm-animals" },
+  { title: "Danny the Donkey", seriesSlug: "farm-animals" },
+  { title: "Tom the Turkey", seriesSlug: "farm-animals" },
+  { title: "Rosie the Rabbit", seriesSlug: "farm-animals" },
+  { title: "Gus the Goose", seriesSlug: "farm-animals" },
+
+  // Series 2 — Wild Animals
+  { title: "Ella the Elephant", seriesSlug: "wild-animals" },
+  { title: "Leo the Lion", seriesSlug: "wild-animals" },
+  { title: "Zuri the Zebra", seriesSlug: "wild-animals" },
+  { title: "Gia the Giraffe", seriesSlug: "wild-animals" },
+  { title: "Pippa the Panda", seriesSlug: "wild-animals" },
+  { title: "Sunny the Sloth", seriesSlug: "wild-animals" },
+  { title: "Kiki the Kangaroo", seriesSlug: "wild-animals" },
+  { title: "Benny the Bear", seriesSlug: "wild-animals" },
+  { title: "Mimi the Monkey", seriesSlug: "wild-animals" },
+  { title: "Tia the Tiger", seriesSlug: "wild-animals" },
+  { title: "Fia the Fox", seriesSlug: "wild-animals" },
+  { title: "Koko the Koala", seriesSlug: "wild-animals" },
 ];
 
 /**
@@ -83,7 +57,11 @@ const PLACEHOLDER: Book[] = [
  * touching any component. Callers already await.
  */
 export async function getBooks(): Promise<Book[]> {
-  return PLACEHOLDER;
+  return SEED.map((seed) => ({
+    ...seed,
+    slug: slugify(seed.title),
+    coverImage: bookCoverPath(seed.seriesSlug, seed.title),
+  }));
 }
 
 export async function getBooksBySeries(seriesSlug: string): Promise<Book[]> {

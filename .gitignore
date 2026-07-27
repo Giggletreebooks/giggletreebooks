@@ -1,1 +1,7 @@
 .DS_Store
+
+# Book interiors: 2.1GB of full page scans. Anything under public/ is published
+# to the open web, so keeping these out of the repo prevents giving the books
+# away for free (and blows past the 1GB GitHub Pages limit). Master copies live
+# in Documents/GT.
+website/public/series/
