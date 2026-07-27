@@ -27,6 +27,31 @@ export default function Logo({
   );
 }
 
+/**
+ * The logo on a white plate. The artwork has dark green and dark brown baked
+ * into it, so on the dark-mode background it all but disappears — it needs a
+ * light ground wherever it renders at full opacity.
+ */
+export function LogoPlate({
+  className,
+  sizes,
+  priority = false,
+  padding = "p-2",
+}: {
+  className?: string;
+  sizes?: string;
+  priority?: boolean;
+  padding?: string;
+}) {
+  return (
+    <span
+      className={`inline-flex rounded-2xl bg-white shadow-sm ring-1 ring-black/5 ${padding}`}
+    >
+      <Logo className={className} sizes={sizes} priority={priority} />
+    </span>
+  );
+}
+
 /** Faint background flourish for placeholder covers. Decorative only. */
 export function LogoWatermark({ className }: { className?: string }) {
   return (

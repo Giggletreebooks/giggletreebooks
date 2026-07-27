@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Logo from "@/app/components/Logo";
+import { LogoPlate } from "@/app/components/Logo";
 
 const nav = [
   { href: "/books", label: "Books" },
@@ -15,9 +15,10 @@ export default function Header() {
           aria-label="Giggle Tree Books, home"
           className="rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
         >
-          <Logo
-            className="h-16 w-auto sm:h-20"
-            sizes="(min-width: 640px) 80px, 64px"
+          <LogoPlate
+            className="h-14 w-auto sm:h-16"
+            sizes="(min-width: 640px) 64px, 56px"
+            padding="p-2 sm:p-2.5"
             priority
           />
         </Link>

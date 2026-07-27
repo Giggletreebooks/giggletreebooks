@@ -43,7 +43,8 @@ export default function Hero() {
           {/* The logo carries the wordmark itself — no text beside it. */}
           <div className="relative mx-auto w-full max-w-md lg:mx-0">
             <div className="absolute inset-0 -rotate-3 rounded-[2rem] border border-border bg-brand-soft/60" />
-            <div className="relative flex aspect-square items-center justify-center rounded-[2rem] border border-border bg-surface p-8 shadow-[0_24px_60px_-32px_rgb(59_28_0_/_0.4)] sm:p-10">
+            {/* bg-white, not bg-surface: the logo's dark ink needs a light ground in both themes. */}
+            <div className="relative flex aspect-square items-center justify-center rounded-[2rem] border border-border bg-white p-8 shadow-[0_24px_60px_-32px_rgb(59_28_0_/_0.4)] sm:p-10">
               <Logo
                 className="h-full w-full object-contain"
                 sizes="(min-width: 640px) 28rem, 90vw"

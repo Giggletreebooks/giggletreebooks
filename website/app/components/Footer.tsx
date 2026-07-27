@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Logo from "@/app/components/Logo";
+import { LogoPlate } from "@/app/components/Logo";
 
 const nav = [
   { href: "/books", label: "Books" },
@@ -11,9 +11,10 @@ export default function Footer() {
     <footer className="border-t border-border">
       <div className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-12 sm:flex-row sm:items-center sm:justify-between">
         <Link href="/" aria-label="Giggle Tree Books, home">
-          <Logo
+          <LogoPlate
             className="h-24 w-auto sm:h-28"
             sizes="(min-width: 640px) 112px, 96px"
+            padding="p-3"
           />
         </Link>
         <div className="flex flex-col gap-4 sm:items-end">
