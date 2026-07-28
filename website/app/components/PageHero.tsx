@@ -1,4 +1,4 @@
-import HeroBackdrop from "@/app/components/decor/HeroBackdrop";
+import ForestScene from "@/app/components/decor/ForestScene";
 import Reveal from "@/app/components/motion/Reveal";
 
 /** Page-level header band. Shorter than the homepage Hero, same backdrop. */
@@ -23,7 +23,7 @@ export default function PageHero({
     // No bottom border: the following Section supplies the divider, and two
     // adjacent 1px borders read as a 2px rule.
     <section className="relative isolate overflow-hidden">
-      <HeroBackdrop />
+      <ForestScene variant="band" />
       <div
         className={`mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:py-24${
           aside

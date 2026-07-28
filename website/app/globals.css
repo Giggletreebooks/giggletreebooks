@@ -142,11 +142,44 @@ body {
   will-change: auto;
 }
 
-/* Opt individual pieces into the ambient float via data-decor-float. */
-[data-decor-item][data-decor-float] {
-  animation: decor-float var(--decor-duration, 12s) var(--ease-in-out) infinite
-    alternate;
+/*
+  Ambient motions. Every one is transform/opacity only, so the compositor
+  handles them without layout or paint work. Duration, delay, and travel are
+  per-item variables — two trees share a rule but never move in lockstep.
+*/
+[data-decor-item][data-decor-motion] {
   animation-delay: var(--decor-delay, 0s);
+  animation-iteration-count: infinite;
+}
+
+[data-decor-item][data-decor-motion="float"] {
+  animation-name: decor-float;
+  animation-duration: var(--decor-duration, 12s);
+  animation-timing-function: var(--ease-in-out);
+  animation-direction: alternate;
+}
+
+/* Trees, grass, flowers: hinged at the base like something rooted. */
+[data-decor-item][data-decor-motion="sway"] {
+  transform-origin: bottom center;
+  animation-name: decor-sway;
+  animation-duration: var(--decor-duration, 8s);
+  animation-timing-function: var(--ease-in-out);
+  animation-direction: alternate;
+}
+
+/* Clouds: one slow pass across the sky, then wrap. */
+[data-decor-item][data-decor-motion="drift"] {
+  animation-name: decor-drift;
+  animation-duration: var(--decor-duration, 90s);
+  animation-timing-function: linear;
+}
+
+/* Leaves: a long diagonal fall with a slow tumble. */
+[data-decor-item][data-decor-motion="fall"] {
+  animation-name: decor-fall;
+  animation-duration: var(--decor-duration, 20s);
+  animation-timing-function: linear;
 }
 
 @keyframes decor-float {
@@ -155,6 +188,46 @@ body {
   }
   to {
     transform: translate3d(0, calc(-1 * var(--decor-drift, 1.5rem)), 0);
+  }
+}
+
+@keyframes decor-sway {
+  from {
+    transform: rotate(calc(-1 * var(--decor-angle, 1.1deg)));
+  }
+  to {
+    transform: rotate(var(--decor-angle, 1.1deg));
+  }
+}
+
+@keyframes decor-drift {
+  from {
+    transform: translate3d(var(--decor-from, -25%), 0, 0);
+  }
+  to {
+    transform: translate3d(var(--decor-to, 125%), 0, 0);
+  }
+}
+
+@keyframes decor-fall {
+  0% {
+    transform: translate3d(0, -3rem, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: var(--decor-opacity, 0.55);
+  }
+  85% {
+    opacity: var(--decor-opacity, 0.55);
+  }
+  100% {
+    transform: translate3d(
+        var(--decor-fall-x, 4rem),
+        var(--decor-fall-distance, 34rem),
+        0
+      )
+      rotate(var(--decor-spin, 240deg));
+    opacity: 0;
   }
 }
 
@@ -333,8 +406,11 @@ body {
     transition: none;
   }
 
-  [data-decor-item][data-decor-float] {
+  /* The forest stays — it just stops moving. The art is the atmosphere; the
+     motion is the enhancement. */
+  [data-decor-item][data-decor-motion] {
     animation: none;
+    transform: none;
   }
 
   [data-card],
