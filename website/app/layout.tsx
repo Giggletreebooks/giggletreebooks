@@ -29,6 +29,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${fraunces.variable} h-full antialiased`}
     >
+      <head>
+        {/*
+          Marks the document as motion-capable before first paint. Entrance
+          animations only hide content once this is set, so with JS disabled
+          or still loading everything renders visible — no blank sections.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `document.documentElement.dataset.motion="ready"`,
+          }}
+        />
+      </head>
       <body className="flex min-h-full flex-col font-sans">
         <Header />
         <main className="flex-1">{children}</main>

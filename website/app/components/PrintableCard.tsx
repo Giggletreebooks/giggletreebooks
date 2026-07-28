@@ -1,5 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
+import {
+  CARD_FOCUS_WITHIN,
+  CARD_INTERACTIVE,
+  CARD_MEDIA,
+  CARD_SHELL,
+  cardAttrs,
+  cardMediaAttrs,
+} from "@/app/lib/cardStyles";
 import { type Printable } from "@/app/lib/printables";
 import { slugTint, tintInk, tintSurface } from "@/app/lib/tint";
 
@@ -8,9 +16,13 @@ export default function PrintableCard({ printable }: { printable: Printable }) {
   const downloadable = Boolean(printable.fileUrl);
 
   return (
-    <article className="group flex w-full flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-all duration-200 hover:-translate-y-1 hover:border-brand hover:shadow-[0_20px_40px_-24px_rgb(59_28_0_/_0.45)] focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-brand motion-reduce:hover:translate-y-0">
+    <article
+      {...cardAttrs}
+      className={`${CARD_SHELL} ${CARD_INTERACTIVE} ${CARD_FOCUS_WITHIN}`}
+    >
       <div
-        className="relative flex aspect-4/3 items-center justify-center overflow-hidden"
+        {...cardMediaAttrs}
+        className={`${CARD_MEDIA} aspect-4/3`}
         style={{ backgroundColor: tintSurface(tint) }}
       >
         {printable.thumbnail ? (
@@ -19,7 +31,7 @@ export default function PrintableCard({ printable }: { printable: Printable }) {
             alt={`Preview of ${printable.title}`}
             fill
             sizes="(min-width: 1024px) 20rem, (min-width: 640px) 45vw, 90vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-105 motion-reduce:group-hover:scale-100"
+            className="object-cover"
           />
         ) : (
           /* Sheet motif stands in until preview artwork lands. */

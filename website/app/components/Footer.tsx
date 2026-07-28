@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LogoPlate } from "@/app/components/Logo";
+import Reveal from "@/app/components/motion/Reveal";
 
 const nav = [
   { href: "/books", label: "Books" },
@@ -9,7 +10,7 @@ const nav = [
 export default function Footer() {
   return (
     <footer className="border-t border-border">
-      <div className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-12 sm:flex-row sm:items-center sm:justify-between">
+      <Reveal className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-12 sm:flex-row sm:items-center sm:justify-between">
         <Link href="/" aria-label="Giggle Tree Books, home">
           <LogoPlate
             className="h-24 w-auto sm:h-28"
@@ -36,7 +37,7 @@ export default function Footer() {
             © {new Date().getFullYear()} Giggle Tree Books
           </p>
         </div>
-      </div>
+      </Reveal>
     </footer>
   );
 }

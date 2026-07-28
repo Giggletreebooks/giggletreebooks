@@ -1,3 +1,10 @@
+import Reveal from "@/app/components/motion/Reveal";
+
+/**
+ * Standard content band. Carries the section's single Reveal, so any
+ * `StaggerItem` children inside animate in behind it without their own
+ * observers.
+ */
 export default function Section({
   title,
   description,
@@ -12,7 +19,7 @@ export default function Section({
 }) {
   return (
     <section className="border-t border-border">
-      <div className="mx-auto max-w-6xl px-6 py-12 sm:py-16 lg:py-20">
+      <Reveal className="mx-auto max-w-6xl px-6 py-12 sm:py-16 lg:py-20">
         <h2 className="font-display text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
           {title}
         </h2>
@@ -26,7 +33,7 @@ export default function Section({
             </p>
           )}
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

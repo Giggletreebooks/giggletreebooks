@@ -2,6 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { LogoWatermark } from "@/app/components/Logo";
 import { type Book } from "@/app/lib/books";
+import {
+  CARD_FOCUS_WITHIN,
+  CARD_INTERACTIVE,
+  CARD_MEDIA,
+  CARD_SHELL,
+  cardAttrs,
+  cardMediaAttrs,
+} from "@/app/lib/cardStyles";
 import { slugTint, tintInk, tintSurface } from "@/app/lib/tint";
 
 export default function BookCard({ book }: { book: Book }) {
@@ -10,9 +18,13 @@ export default function BookCard({ book }: { book: Book }) {
   return (
     /* Not a <Link> wrapper: the title link is stretched over the whole card so
        the "View Book" affordance stays decorative and nothing nests. */
-    <article className="group relative flex w-full flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-all duration-200 hover:-translate-y-1 hover:border-brand hover:shadow-[0_20px_40px_-24px_rgb(59_28_0_/_0.45)] focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-brand motion-reduce:hover:translate-y-0">
+    <article
+      {...cardAttrs}
+      className={`relative ${CARD_SHELL} ${CARD_INTERACTIVE} ${CARD_FOCUS_WITHIN}`}
+    >
       <div
-        className="relative flex aspect-4/3 items-center justify-center overflow-hidden"
+        {...cardMediaAttrs}
+        className={`${CARD_MEDIA} aspect-4/3`}
         style={{ backgroundColor: tintSurface(tint) }}
       >
         {book.coverImage ? (
@@ -21,7 +33,7 @@ export default function BookCard({ book }: { book: Book }) {
             alt={`Cover of ${book.title}`}
             fill
             sizes="(min-width: 1280px) 17rem, (min-width: 1024px) 21rem, (min-width: 640px) 45vw, 92vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-105 motion-reduce:group-hover:scale-100"
+            className="object-cover"
           />
         ) : (
           /* Stands in until cover artwork lands. */

@@ -58,12 +58,176 @@ body {
   outline-color: var(--brand);
 }
 
-/* Decorative blobs drift slowly; disabled for reduced-motion via motion-safe: */
-@keyframes drift {
+/* ==========================================================================
+   MOTION SYSTEM
+   Every duration, easing, and distance lives here. Tune the feel of the whole
+   site from this block rather than editing components.
+   ========================================================================== */
+
+:root {
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 500ms;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Entrance reveal */
+  --reveal-distance: 10px;
+  --reveal-duration: var(--duration-slow);
+  /* Gap between staggered siblings; multiplied by --stagger on each item. */
+  --stagger-step: 60ms;
+
+  /* Card interaction. Components read these, so a future tilt/parallax layer
+     only has to write them — no component changes. */
+  --card-lift: -4px;
+  --card-tilt-x: 0deg;
+  --card-tilt-y: 0deg;
+  --card-scale: 1;
+}
+
+/* --------------------------------------------------------------------------
+   ENTRANCE REVEAL
+   Elements start hidden only once JS has confirmed it is running (the inline
+   script in layout.tsx sets data-motion="ready" before first paint). Without
+   JS the attribute never appears and all content renders normally.
+   -------------------------------------------------------------------------- */
+
+[data-motion="ready"] [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, var(--reveal-distance), 0);
+  transition:
+    opacity var(--reveal-duration) var(--ease-out),
+    transform var(--reveal-duration) var(--ease-out);
+  transition-delay: calc(var(--stagger, 0) * var(--stagger-step));
+}
+
+[data-motion="ready"] [data-reveal][data-revealed] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Children that stagger in after their Reveal fires. Each sets --stagger
+   inline (server-rendered), so a grid of 25 cards costs one observer, not 25. */
+[data-motion="ready"] [data-reveal] [data-reveal-child] {
+  opacity: 0;
+  transform: translate3d(0, var(--reveal-distance), 0);
+  transition:
+    opacity var(--reveal-duration) var(--ease-out),
+    transform var(--reveal-duration) var(--ease-out);
+  transition-delay: calc(var(--stagger, 0) * var(--stagger-step));
+}
+
+[data-motion="ready"] [data-reveal][data-revealed] [data-reveal-child] {
+  opacity: 1;
+  transform: none;
+}
+
+/* --------------------------------------------------------------------------
+   DECOR LAYER
+   Decorative art is a sibling of content, never a wrapper, so it can be
+   animated without touching layout or reflowing text.
+   -------------------------------------------------------------------------- */
+
+[data-decor] {
+  position: absolute;
+  inset: 0;
+  z-index: -10;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+[data-decor-item] {
+  position: absolute;
+  will-change: auto;
+}
+
+/* Opt individual pieces into the ambient float via data-decor-float. */
+[data-decor-item][data-decor-float] {
+  animation: decor-float var(--decor-duration, 12s) var(--ease-in-out) infinite
+    alternate;
+  animation-delay: var(--decor-delay, 0s);
+}
+
+@keyframes decor-float {
   from {
     transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translate3d(0, -1.5rem, 0);
+    transform: translate3d(0, calc(-1 * var(--decor-drift, 1.5rem)), 0);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   CARDS
+   Transform and shadow are pre-declared as animatable so hover, lift, and a
+   future 3D tilt compose into one transform without a rewrite.
+   -------------------------------------------------------------------------- */
+
+[data-card] {
+  transition:
+    transform var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out);
+  transform: translate3d(0, 0, 0) rotateX(var(--card-tilt-x))
+    rotateY(var(--card-tilt-y)) scale(var(--card-scale));
+}
+
+[data-card-interactive]:hover {
+  --card-scale: 1.005;
+  transform: translate3d(0, var(--card-lift), 0) rotateX(var(--card-tilt-x))
+    rotateY(var(--card-tilt-y)) scale(var(--card-scale));
+}
+
+/* Wrap a card in this to give a future tilt effect its perspective. */
+[data-card-perspective] {
+  perspective: 1000px;
+}
+
+[data-card-media] {
+  overflow: hidden;
+}
+
+[data-card-media] img {
+  transition: transform var(--duration-slow) var(--ease-out);
+}
+
+[data-card-interactive]:hover [data-card-media] img {
+  transform: scale(1.04);
+}
+
+/* --------------------------------------------------------------------------
+   REDUCED MOTION
+   One global opt-out. Content is fully visible and legible; only movement is
+   removed. Anything added later inherits this without extra work.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  [data-motion="ready"] [data-reveal],
+  [data-motion="ready"] [data-reveal][data-revealed],
+  [data-motion="ready"] [data-reveal] [data-reveal-child],
+  [data-motion="ready"] [data-reveal][data-revealed] [data-reveal-child] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  [data-decor-item][data-decor-float] {
+    animation: none;
+  }
+
+  [data-card],
+  [data-card-interactive]:hover,
+  [data-card-interactive]:hover [data-card-media] img {
+    transform: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

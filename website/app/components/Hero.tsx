@@ -1,6 +1,7 @@
 import Link from "next/link";
-import HeroBackdrop from "@/app/components/HeroBackdrop";
+import HeroBackdrop from "@/app/components/decor/HeroBackdrop";
 import Logo from "@/app/components/Logo";
+import Reveal from "@/app/components/motion/Reveal";
 
 export default function Hero() {
   return (
@@ -9,7 +10,9 @@ export default function Hero() {
 
       <div className="mx-auto max-w-6xl px-6 py-16 sm:py-24 lg:py-32">
         <div className="grid items-center gap-12 sm:gap-16 lg:grid-cols-[1.05fr_.95fr] lg:gap-20">
-          <div>
+          {/* Only the text column reveals — the logo card is the LCP element
+              and fading it in would delay Largest Contentful Paint. */}
+          <Reveal>
             <p className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3.5 py-1.5 text-xs font-medium tracking-wide text-accent uppercase">
               <span className="size-1.5 rounded-full bg-accent" />
               Independent children&rsquo;s publisher
@@ -38,7 +41,7 @@ export default function Hero() {
                 Free Printables
               </Link>
             </div>
-          </div>
+          </Reveal>
 
           {/* The logo carries the wordmark itself — no text beside it. */}
           <div className="relative mx-auto w-full max-w-md lg:mx-0">

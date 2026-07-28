@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import BookGrid from "@/app/components/BookGrid";
 import FeatureCard from "@/app/components/FeatureCard";
+import StaggerItem from "@/app/components/motion/StaggerItem";
 import PageHero from "@/app/components/PageHero";
 import PrintableGrid from "@/app/components/PrintableGrid";
 import Section from "@/app/components/Section";
@@ -77,8 +78,9 @@ export default async function SeriesPage(props: PageProps<"/books/[series]">) {
         {/* Flex-wrap so a short final row centres itself at any count. */}
         <ul className="flex flex-wrap justify-center gap-6">
           {learnings.map((learning, index) => (
-            <li
+            <StaggerItem
               key={learning.title}
+              index={index}
               className="basis-full sm:basis-[calc(50%-0.75rem)] lg:basis-[calc(33.333%-1rem)]"
             >
               <FeatureCard
@@ -87,7 +89,7 @@ export default async function SeriesPage(props: PageProps<"/books/[series]">) {
                   icon: LEARNING_ICONS[index % LEARNING_ICONS.length],
                 }}
               />
-            </li>
+            </StaggerItem>
           ))}
         </ul>
       </Section>

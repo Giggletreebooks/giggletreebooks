@@ -1,4 +1,5 @@
-import HeroBackdrop from "@/app/components/HeroBackdrop";
+import HeroBackdrop from "@/app/components/decor/HeroBackdrop";
+import Reveal from "@/app/components/motion/Reveal";
 
 /** Page-level header band. Shorter than the homepage Hero, same backdrop. */
 export default function PageHero({
@@ -30,7 +31,9 @@ export default function PageHero({
             : ""
         }`}
       >
-        <div>
+        {/* Only the text column reveals — the aside holds the LCP image, and
+            fading it in would delay Largest Contentful Paint. */}
+        <Reveal>
           {breadcrumb && <div className="mb-6">{breadcrumb}</div>}
           {eyebrow && (
             <p className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3.5 py-1.5 text-xs font-medium tracking-wide text-accent uppercase">
@@ -47,7 +50,7 @@ export default function PageHero({
             </p>
           )}
           {children && <div className="mt-8">{children}</div>}
-        </div>
+        </Reveal>
         {aside && <div className="mx-auto w-full max-w-sm lg:mx-0">{aside}</div>}
       </div>
     </section>

@@ -1,14 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LogoWatermark } from "@/app/components/Logo";
+import {
+  CARD_FOCUS,
+  CARD_INTERACTIVE,
+  CARD_MEDIA,
+  CARD_SHELL,
+  cardAttrs,
+  cardMediaAttrs,
+  staticCardAttrs,
+} from "@/app/lib/cardStyles";
 import { type Series } from "@/app/lib/series";
 import { slugTint, tintInk, tintSurface } from "@/app/lib/tint";
-
-const BASE =
-  "group flex w-full flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-all duration-200";
-
-const INTERACTIVE =
-  " hover:-translate-y-1 hover:border-brand hover:shadow-[0_20px_40px_-24px_rgb(59_28_0_/_0.45)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:hover:translate-y-0";
 
 export default function SeriesCard({ series }: { series: Series }) {
   const tint = slugTint(series.slug);
@@ -17,7 +20,8 @@ export default function SeriesCard({ series }: { series: Series }) {
   const body = (
     <>
       <div
-        className="relative flex aspect-4/3 items-center justify-center overflow-hidden"
+        {...cardMediaAttrs}
+        className={`${CARD_MEDIA} aspect-4/3`}
         style={{ backgroundColor: tintSurface(tint) }}
       >
         {series.coverImage ? (
@@ -26,7 +30,7 @@ export default function SeriesCard({ series }: { series: Series }) {
             alt=""
             fill
             sizes="(min-width: 1024px) 20rem, (min-width: 640px) 45vw, 90vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-105 motion-reduce:group-hover:scale-100"
+            className="object-cover"
           />
         ) : (
           /* Watermark + initial stand in until cover artwork lands. */
@@ -73,11 +77,19 @@ export default function SeriesCard({ series }: { series: Series }) {
 
   /* Unreleased series have no page to link to, so they stay inert. */
   if (!available) {
-    return <article className={BASE}>{body}</article>;
+    return (
+      <article {...staticCardAttrs} className={CARD_SHELL}>
+        {body}
+      </article>
+    );
   }
 
   return (
-    <Link href={`/books/${series.slug}`} className={BASE + INTERACTIVE}>
+    <Link
+      href={`/books/${series.slug}`}
+      {...cardAttrs}
+      className={`${CARD_SHELL} ${CARD_INTERACTIVE} ${CARD_FOCUS}`}
+    >
       {body}
     </Link>
   );
