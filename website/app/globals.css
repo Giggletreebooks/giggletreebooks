@@ -197,6 +197,127 @@ body {
 }
 
 /* --------------------------------------------------------------------------
+   3D BOOKS
+   A real preserve-3d object: front cover plus a spine plane at its left edge.
+   Resting rotation turns the left side toward the viewer, which is what makes
+   the spine visible at all. Depth and angles are variables so the whole shelf
+   retunes from here.
+   -------------------------------------------------------------------------- */
+
+:root {
+  --book-depth: 22px;
+  --book-rotate: 9deg;
+  --book-rotate-hover: 17deg;
+  --book-tilt-hover: 3deg;
+  --book-lift: -10px;
+}
+
+[data-book-scene] {
+  perspective: 1400px;
+  perspective-origin: 50% 40%;
+}
+
+[data-book] {
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateY(var(--book-rotate));
+  transition: transform var(--duration-slow) var(--ease-out);
+}
+
+/* Front cover, pushed forward half the depth so the spine straddles it. */
+[data-book-face] {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 3px 6px 6px 3px;
+  transform: translateZ(calc(var(--book-depth) / 2));
+  backface-visibility: hidden;
+  box-shadow: 0 2px 8px rgb(59 28 0 / 0.18);
+}
+
+/*
+  Spine: a plane the width of the book's depth, hinged on the front cover's
+  left edge and swung back so it spans the full thickness.
+  transform reads right-to-left — rotate about the hinge first, then push it
+  back by half the depth so it meets the back cover.
+*/
+[data-book-spine] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: var(--book-depth);
+  transform-origin: left center;
+  transform: translateZ(calc(var(--book-depth) / -2)) rotateY(-90deg);
+  background: linear-gradient(
+    to right,
+    rgb(0 0 0 / 0.32),
+    rgb(0 0 0 / 0.08) 45%,
+    rgb(255 255 255 / 0.14) 75%,
+    rgb(0 0 0 / 0.22)
+  );
+  background-color: var(--book-spine-color, #6e5240);
+  border-radius: 3px 0 0 3px;
+}
+
+/* The fold shading and gutter highlight that sell the cover as printed paper. */
+[data-book-gutter] {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      to right,
+      rgb(0 0 0 / 0.28) 0%,
+      rgb(0 0 0 / 0.1) 2.5%,
+      rgb(255 255 255 / 0.16) 5%,
+      rgb(255 255 255 / 0) 12%
+    ),
+    linear-gradient(to left, rgb(0 0 0 / 0.12) 0%, rgb(0 0 0 / 0) 8%);
+}
+
+/* Contact shadow on the ground, not on the book. */
+[data-book-shadow] {
+  position: absolute;
+  bottom: -4%;
+  left: 50%;
+  width: 78%;
+  height: 7%;
+  transform: translateX(-50%) translateZ(calc(var(--book-depth) / -2));
+  border-radius: 50%;
+  background: rgb(59 28 0 / 0.3);
+  filter: blur(10px);
+  transition:
+    width var(--duration-slow) var(--ease-out),
+    opacity var(--duration-slow) var(--ease-out),
+    filter var(--duration-slow) var(--ease-out);
+}
+
+/* Hover only where hovering exists — stops touch devices sticking mid-tilt. */
+@media (hover: hover) {
+  [data-card-interactive]:hover [data-book],
+  [data-book-scene]:hover [data-book] {
+    transform: rotateY(var(--book-rotate-hover)) rotateX(var(--book-tilt-hover))
+      translateY(var(--book-lift));
+  }
+
+  [data-card-interactive]:hover [data-book-shadow],
+  [data-book-scene]:hover [data-book-shadow] {
+    width: 86%;
+    opacity: 0.85;
+    filter: blur(16px);
+  }
+}
+
+/* Narrow screens: less depth and a shallower angle so books stay compact. */
+@media (max-width: 640px) {
+  :root {
+    --book-depth: 14px;
+    --book-rotate: 7deg;
+  }
+}
+
+/* --------------------------------------------------------------------------
    REDUCED MOTION
    One global opt-out. Content is fully visible and legible; only movement is
    removed. Anything added later inherits this without extra work.
@@ -220,6 +341,26 @@ body {
   [data-card-interactive]:hover,
   [data-card-interactive]:hover [data-card-media] img {
     transform: none;
+  }
+
+  /*
+    Books keep their resting 3D form — static depth is not motion, and
+    flattening them would remove information rather than movement. Only the
+    hover travel and its transition are dropped.
+  */
+  [data-book] {
+    transition: none;
+  }
+
+  [data-card-interactive]:hover [data-book],
+  [data-book-scene]:hover [data-book] {
+    transform: rotateY(var(--book-rotate));
+  }
+
+  [data-card-interactive]:hover [data-book-shadow],
+  [data-book-scene]:hover [data-book-shadow] {
+    width: 78%;
+    filter: blur(10px);
   }
 
   *,

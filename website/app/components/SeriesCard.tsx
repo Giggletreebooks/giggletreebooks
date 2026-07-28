@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import Book3D from "@/app/components/book/Book3D";
 import { LogoWatermark } from "@/app/components/Logo";
 import {
   CARD_FOCUS,
@@ -7,7 +7,6 @@ import {
   CARD_MEDIA,
   CARD_SHELL,
   cardAttrs,
-  cardMediaAttrs,
   staticCardAttrs,
 } from "@/app/lib/cardStyles";
 import { type Series } from "@/app/lib/series";
@@ -19,18 +18,19 @@ export default function SeriesCard({ series }: { series: Series }) {
 
   const body = (
     <>
+      {/* No data-card-media here: the book supplies its own hover motion, and
+          the image-zoom hook would fight the tilt. */}
       <div
-        {...cardMediaAttrs}
-        className={`${CARD_MEDIA} aspect-4/3`}
+        className={`${CARD_MEDIA} aspect-4/3 px-6 pt-6 pb-8`}
         style={{ backgroundColor: tintSurface(tint) }}
       >
         {series.coverImage ? (
-          <Image
-            src={series.coverImage}
-            alt=""
-            fill
-            sizes="(min-width: 1024px) 20rem, (min-width: 640px) 45vw, 90vw"
-            className="object-cover"
+          /* A series is represented by its first book, shown the same way. */
+          <Book3D
+            cover={series.coverImage}
+            title={series.title}
+            tintSlug={series.slug}
+            sizes="(min-width: 1024px) 9rem, (min-width: 640px) 20vw, 40vw"
           />
         ) : (
           /* Watermark + initial stand in until cover artwork lands. */

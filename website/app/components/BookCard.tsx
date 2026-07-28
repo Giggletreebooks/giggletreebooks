@@ -1,16 +1,13 @@
-import Image from "next/image";
 import Link from "next/link";
-import { LogoWatermark } from "@/app/components/Logo";
+import Book3D from "@/app/components/book/Book3D";
 import { type Book } from "@/app/lib/books";
 import {
   CARD_FOCUS_WITHIN,
   CARD_INTERACTIVE,
-  CARD_MEDIA,
   CARD_SHELL,
   cardAttrs,
-  cardMediaAttrs,
 } from "@/app/lib/cardStyles";
-import { slugTint, tintInk, tintSurface } from "@/app/lib/tint";
+import { slugTint, tintSurface } from "@/app/lib/tint";
 
 export default function BookCard({ book }: { book: Book }) {
   const tint = slugTint(book.seriesSlug);
@@ -22,32 +19,18 @@ export default function BookCard({ book }: { book: Book }) {
       {...cardAttrs}
       className={`relative ${CARD_SHELL} ${CARD_INTERACTIVE} ${CARD_FOCUS_WITHIN}`}
     >
+      {/* The book stands on a shelf-like ground rather than filling the well,
+          so its depth and contact shadow have somewhere to read against. */}
       <div
-        {...cardMediaAttrs}
-        className={`${CARD_MEDIA} aspect-4/3`}
+        className="relative flex aspect-4/5 items-center justify-center px-6 pt-8 pb-10"
         style={{ backgroundColor: tintSurface(tint) }}
       >
-        {book.coverImage ? (
-          <Image
-            src={book.coverImage}
-            alt={`Cover of ${book.title}`}
-            fill
-            sizes="(min-width: 1280px) 17rem, (min-width: 1024px) 21rem, (min-width: 640px) 45vw, 92vw"
-            className="object-cover"
-          />
-        ) : (
-          /* Stands in until cover artwork lands. */
-          <>
-            <LogoWatermark className="absolute -right-10 -bottom-12 h-44 w-auto opacity-[0.08]" />
-            <span
-              aria-hidden
-              className="px-6 text-center font-display text-xl leading-tight font-semibold tracking-tight break-words text-balance sm:text-2xl"
-              style={{ color: tintInk(tint) }}
-            >
-              {book.title}
-            </span>
-          </>
-        )}
+        <Book3D
+          cover={book.coverImage}
+          title={book.title}
+          tintSlug={book.seriesSlug}
+          sizes="(min-width: 1280px) 12rem, (min-width: 1024px) 14rem, (min-width: 640px) 30vw, 60vw"
+        />
       </div>
 
       <div className="flex flex-1 flex-col p-6">
