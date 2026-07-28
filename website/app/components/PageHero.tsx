@@ -2,12 +2,15 @@ import HeroBackdrop from "@/app/components/HeroBackdrop";
 
 /** Page-level header band. Shorter than the homepage Hero, same backdrop. */
 export default function PageHero({
+  breadcrumb,
   eyebrow,
   title,
   description,
   aside,
   children,
 }: {
+  /** Trail rendered above the eyebrow, for pages nested below a hub. */
+  breadcrumb?: React.ReactNode;
   eyebrow?: string;
   title: string;
   description?: string;
@@ -28,6 +31,7 @@ export default function PageHero({
         }`}
       >
         <div>
+          {breadcrumb && <div className="mb-6">{breadcrumb}</div>}
           {eyebrow && (
             <p className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3.5 py-1.5 text-xs font-medium tracking-wide text-accent uppercase">
               <span className="size-1.5 rounded-full bg-accent" />

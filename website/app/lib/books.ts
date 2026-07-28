@@ -72,3 +72,12 @@ export async function getBooks(): Promise<Book[]> {
 export async function getBooksBySeries(seriesSlug: string): Promise<Book[]> {
   return (await getBooks()).filter((book) => book.seriesSlug === seriesSlug);
 }
+
+export async function getBook(
+  seriesSlug: string,
+  slug: string,
+): Promise<Book | undefined> {
+  return (await getBooks()).find(
+    (book) => book.seriesSlug === seriesSlug && book.slug === slug,
+  );
+}
