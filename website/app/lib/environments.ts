@@ -66,6 +66,13 @@ export type LayerSpec = {
   motion?: DecorMotion;
   /** Hide below this breakpoint to keep small screens cheap. */
   minWidth?: "sm" | "md" | "lg";
+  /**
+   * Paint in front of the chapter's content. For the nearest things only —
+   * a leaf crossing the headline, a butterfly passing the logo. This is what
+   * puts the reader *inside* the scene rather than in front of it, so use it
+   * sparingly and keep it faint: it is drawing over the copy.
+   */
+  front?: boolean;
 };
 
 export type Environment = {
@@ -113,7 +120,12 @@ export const ENVIRONMENTS: Record<EnvironmentId, Environment> = {
     layers: [
       { art: "sun", depth: 0.04 },
       { art: "clouds", depth: 0.1, count: 2, motion: "drift" },
-      { art: "birds", depth: 0.16, count: 3, motion: "glide", minWidth: "sm" },
+      /*
+        No birds here until they are painted. At this size the vector is three
+        grey squiggles, and in a sky that otherwise holds painted clouds they
+        read as pencil marks left on the page. An empty sky beats an
+        unfinished one, and this is the first thing anyone sees.
+      */
       { art: "softHills", depth: 0.22 },
       { art: "treeline", depth: 0.3, count: 9, motion: "sway", minWidth: "md" },
       { art: "haze", depth: 0.36 },
@@ -128,6 +140,26 @@ export const ENVIRONMENTS: Record<EnvironmentId, Environment> = {
       { art: "grass", depth: 0.92 },
       { art: "grass", depth: 1, count: 6, motion: "sway" },
       { art: "flowers", depth: 1, count: 6, motion: "sway", minWidth: "sm" },
+      /*
+        The near field, painted over everything including the logo. Two leaves
+        and a butterfly are enough: they cross in front of the card, which is
+        what makes it read as something lying in the scene rather than a video
+        pasted on top of it.
+
+        Desktop only. The job is fusing the illustration into the scene beside
+        it, and below `lg` the two are stacked rather than side by side — so
+        there is nothing to fuse, and a leaf this size just falls through the
+        copy on a narrow column.
+      */
+      { art: "leaves", depth: 1, count: 2, motion: "fall", minWidth: "lg", front: true },
+      {
+        art: "butterflies",
+        depth: 1,
+        count: 1,
+        motion: "flutter",
+        minWidth: "lg",
+        front: true,
+      },
     ],
   },
   farm: {

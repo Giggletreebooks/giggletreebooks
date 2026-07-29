@@ -38,36 +38,55 @@ export default function EnvironmentScene({
   environment: Environment;
 }) {
   return (
-    <DecorLayer>
-      {/* Atmospheric haze pooling at the edges, behind everything. */}
-      <ParallaxLayer depth={0.05}>
-        <DecorItem
-          motion="float"
-          duration={18}
-          drift="1rem"
-          className="-top-24 -left-32 size-[26rem] rounded-full blur-3xl"
-          style={{ background: "var(--env-haze)", opacity: 0.55 }}
-        />
-        <DecorItem
-          motion="float"
-          duration={24}
-          delay={-8}
-          drift="0.75rem"
-          className="top-24 -right-28 size-[22rem] rounded-full blur-3xl"
-          style={{ background: "var(--env-sky)", opacity: 0.5 }}
-        />
-      </ParallaxLayer>
-
-      {environment.layers.map((layer, index) => (
-        <ParallaxLayer
-          key={`${layer.art}-${index}`}
-          depth={layer.depth}
-          className={VISIBILITY[layer.minWidth ?? "all"]}
-        >
-          {renderLayer(layer)}
+    <>
+      <DecorLayer>
+        {/* Atmospheric haze pooling at the edges, behind everything. */}
+        <ParallaxLayer depth={0.05}>
+          <DecorItem
+            motion="float"
+            duration={18}
+            drift="1rem"
+            className="-top-24 -left-32 size-[26rem] rounded-full blur-3xl"
+            style={{ background: "var(--env-haze)", opacity: 0.55 }}
+          />
+          <DecorItem
+            motion="float"
+            duration={24}
+            delay={-8}
+            drift="0.75rem"
+            className="top-24 -right-28 size-[22rem] rounded-full blur-3xl"
+            style={{ background: "var(--env-sky)", opacity: 0.5 }}
+          />
         </ParallaxLayer>
-      ))}
-    </DecorLayer>
+
+        {environment.layers
+          .filter((layer) => !layer.front)
+          .map((layer, index) => (
+            <ParallaxLayer
+              key={`${layer.art}-${index}`}
+              depth={layer.depth}
+              className={VISIBILITY[layer.minWidth ?? "all"]}
+            >
+              {renderLayer(layer)}
+            </ParallaxLayer>
+          ))}
+      </DecorLayer>
+
+      {/* The near field, over the content. */}
+      <DecorLayer front>
+        {environment.layers
+          .filter((layer) => layer.front)
+          .map((layer, index) => (
+            <ParallaxLayer
+              key={`front-${layer.art}-${index}`}
+              depth={layer.depth}
+              className={VISIBILITY[layer.minWidth ?? "all"]}
+            >
+              {renderLayer(layer)}
+            </ParallaxLayer>
+          ))}
+      </DecorLayer>
+    </>
   );
 }
 
@@ -157,7 +176,10 @@ function renderLayer(layer: LayerSpec) {
           motion="float"
           duration={26}
           drift="0.75rem"
-          className="-top-32 -left-24 h-[34rem] w-[34rem] sm:-top-40 sm:-left-16"
+          /* Wide enough that its falloff pools over the copy. The clearing a
+             headline sits in should read as light falling on the scene, not
+             as an empty patch of canvas left for the text. */
+          className="-top-40 -left-32 h-[46rem] w-[46rem] sm:-top-48 sm:-left-24"
           style={{ color: "var(--env-haze)", opacity: 0.85 }}
         >
           <SunGlow className="h-full w-full" />
@@ -342,11 +364,20 @@ function renderLayer(layer: LayerSpec) {
           fallX={i % 2 === 0 ? "5rem" : "-4rem"}
           fallDistance="30rem"
           spin={i % 2 === 0 ? "240deg" : "-200deg"}
-          opacity={0.4}
-          className="top-0 h-4 w-4 sm:h-5 sm:w-5"
-          style={{ left: spread(count, i), color: "var(--env-foliage)" }}
+          /* Nearest leaves fall faster, larger and more solid than far ones —
+             the whole reason for having them in front. */
+          opacity={layer.front ? 0.7 : 0.4}
+          className={
+            layer.front ? "top-0 h-7 w-7 sm:h-8 sm:w-8" : "top-0 h-4 w-4 sm:h-5 sm:w-5"
+          }
+          style={{
+            /* Front leaves fall down the sides of the illustration rather
+               than through the middle of it. */
+            left: layer.front ? `${46 + i * 44}%` : spread(count, i),
+            color: "var(--env-foliage)",
+          }}
         >
-          <Scenery name="leaf" sizes="1.25rem">
+          <Scenery name="leaf" sizes={layer.front ? "2.5rem" : "1.25rem"}>
             <Leaf className="h-full w-full" />
           </Scenery>
         </DecorItem>
@@ -465,15 +496,21 @@ function renderLayer(layer: LayerSpec) {
           motion={layer.motion}
           duration={16 + i * 5}
           delay={-i * 6}
-          className="h-4 w-5 sm:h-5 sm:w-6"
+          /* In front, it is the nearest thing in the scene, so it is bigger. */
+          className={
+            layer.front ? "h-7 w-8 sm:h-8 sm:w-10" : "h-4 w-5 sm:h-5 sm:w-6"
+          }
           style={{
-            left: `${12 + i * 26}%`,
-            top: `${46 + i * 9}%`,
+            /* A front butterfly grazes the edge of the illustration, not the
+               copy and not the middle of the artwork. Crossing a boundary is
+               what fuses two things; crossing a face just hides it. */
+            left: layer.front ? `${57 + i * 12}%` : `${12 + i * 26}%`,
+            top: layer.front ? `${62 + i * 12}%` : `${46 + i * 9}%`,
             color: "var(--env-accent)",
-            opacity: 0.5,
+            opacity: layer.front ? 0.72 : 0.5,
           }}
         >
-          <Scenery name="butterfly" sizes="1.5rem">
+          <Scenery name="butterfly" sizes="2.5rem">
             <Butterfly className="h-full w-full" />
           </Scenery>
         </DecorItem>

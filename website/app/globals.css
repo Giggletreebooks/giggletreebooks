@@ -142,6 +142,12 @@ body {
   pointer-events: none;
 }
 
+/* The near field, painted over the content rather than under it. Content sits
+   at z-index 2; this clears it. */
+[data-decor="front"] {
+  z-index: 3;
+}
+
 [data-decor-item] {
   position: absolute;
   will-change: auto;
@@ -362,12 +368,21 @@ body {
   /* clip, not hidden — see [data-decor]: hidden would capture the parallax
      view timelines and hold them still. */
   overflow: clip;
-  background: linear-gradient(
-    to bottom,
-    var(--env-sky) 0%,
-    color-mix(in oklab, var(--env-sky) 35%, var(--background)) 45%,
-    var(--background) 100%
-  );
+  /* A warm glow pooling along the horizon under the vertical wash. A flat
+     two-stop sky has no light source in it; this gives the scene somewhere
+     for the sun to be and warms the ground plane it stands on. */
+  background:
+    radial-gradient(
+      130% 52% at 50% 100%,
+      color-mix(in oklab, var(--env-haze) 62%, transparent) 0%,
+      transparent 72%
+    ),
+    linear-gradient(
+      to bottom,
+      var(--env-sky) 0%,
+      color-mix(in oklab, var(--env-sky) 35%, var(--background)) 45%,
+      var(--background) 100%
+    );
 }
 
 /* Chapters bleed into each other rather than butting up with a hard edge. */
