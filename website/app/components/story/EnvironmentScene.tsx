@@ -186,11 +186,37 @@ function renderLayer(layer: LayerSpec) {
         </DecorItem>
       );
 
+    case "motes":
+      /*
+        Dust hanging in the morning light. Only ever where the sun is — motes
+        in shade are just specks, and specks read as dirt on the screen. They
+        are the cheapest magic available: no artwork, one small element each,
+        and they turn a lit corner into air you could walk through.
+      */
+      return items.map((i) => (
+        <DecorItem
+          key={i}
+          motion="float"
+          duration={vary(16, i, 3.1)}
+          delay={-i * 5}
+          drift={`${2 + (i % 3) * 1.5}rem`}
+          className="rounded-full blur-[1.5px]"
+          style={{
+            left: `${5 + i * 7}%`,
+            top: `${10 + ((i * 17) % 42)}%`,
+            width: `${4 + (i % 3) * 3}px`,
+            height: `${4 + (i % 3) * 3}px`,
+            background: "rgb(255 238 196)",
+            opacity: 0.6 - (i % 3) * 0.15,
+          }}
+        />
+      ));
+
     case "softHills":
       return (
         <DecorItem
           className="inset-x-0 bottom-0 h-40 sm:h-56 lg:h-64"
-          style={{ color: "var(--env-ground)", opacity: 0.2 }}
+          style={{ color: "var(--env-ground)", opacity: 0.32 }}
         >
           <Scenery name="hills" sizes="100vw" fit="stretch">
             <HillsSoft className="h-full w-full" />
@@ -221,7 +247,7 @@ function renderLayer(layer: LayerSpec) {
       return (
         <DecorItem
           className="inset-x-0 bottom-0 h-32 sm:h-44"
-          style={{ color: "var(--env-haze)", opacity: 0.5 }}
+          style={{ color: "var(--env-haze)", opacity: 0.68 }}
         >
           <Scenery name="path" sizes="100vw" fit="stretch">
             <Path className="h-full w-full" />
@@ -246,7 +272,7 @@ function renderLayer(layer: LayerSpec) {
                foliage was reaching into the body copy. */
             [i % 2 === 0 ? "left" : "right"]: "-7rem",
             color: "var(--env-foliage)",
-            opacity: 0.4,
+            opacity: 0.62,
           }}
         >
           <Scenery name="tree-oak" sizes="(min-width: 1280px) 20rem, 16rem">
@@ -266,7 +292,7 @@ function renderLayer(layer: LayerSpec) {
             left: spread(count, i),
             bottom: `${1 + ((i * 1.7) % 2)}%`,
             color: "var(--env-foliage)",
-            opacity: 0.34,
+            opacity: 0.5,
           }}
         >
           <div
@@ -284,7 +310,7 @@ function renderLayer(layer: LayerSpec) {
       return (
         <DecorItem
           className="inset-x-0 bottom-0 h-24 sm:h-32"
-          style={{ color: "var(--env-ground)", opacity: 0.16 }}
+          style={{ color: "var(--env-ground)", opacity: 0.26 }}
         >
           <Scenery name="hills" sizes="100vw" fit="stretch">
             <Hills className="h-full w-full" />
@@ -316,7 +342,7 @@ function renderLayer(layer: LayerSpec) {
             color: "var(--env-foliage)",
             /* Furthest thing with a shape. Anything stronger and the
                distance collapses. */
-            opacity: 0.15,
+            opacity: 0.22,
           }}
         >
           <div
@@ -398,7 +424,7 @@ function renderLayer(layer: LayerSpec) {
                 left: spread(count, i),
                 color: "var(--env-ground)",
                 /* Nearest thing in the scene, so the strongest. */
-                opacity: 0.38,
+                opacity: 0.55,
               }}
             >
               <div
@@ -419,7 +445,7 @@ function renderLayer(layer: LayerSpec) {
             */
             <DecorItem
               className="inset-x-0 bottom-0 h-20 sm:h-28"
-              style={{ color: "var(--env-ground)", opacity: 0.3 }}
+              style={{ color: "var(--env-ground)", opacity: 0.46 }}
             >
               <Scenery name="grass" sizes="100vw" fit="stretch">
                 <Grass className="h-full w-full" />
@@ -433,7 +459,7 @@ function renderLayer(layer: LayerSpec) {
           rooted
           rootFade="12%"
           className="right-[6%] bottom-[7%] h-32 w-44 lg:h-40 lg:w-56"
-          style={{ color: "var(--env-accent)", opacity: 0.26 }}
+          style={{ color: "var(--env-accent)", opacity: 0.4 }}
         >
           <Scenery name="barn" sizes="14rem">
             <Barn className="h-full w-full" />
@@ -447,7 +473,7 @@ function renderLayer(layer: LayerSpec) {
           rooted
           rootFade="16%"
           className="inset-x-0 bottom-[5%] h-10 sm:h-12"
-          style={{ color: "var(--env-ground)", opacity: 0.28 }}
+          style={{ color: "var(--env-ground)", opacity: 0.4 }}
         >
           <Scenery name="fence" sizes="100vw" fit="stretch">
             <Fence className="h-full w-full" />
@@ -465,7 +491,7 @@ function renderLayer(layer: LayerSpec) {
           style={{
             [i % 2 === 0 ? "left" : "right"]: `${6 + i * 4}%`,
             color: "var(--env-ground)",
-            opacity: 0.32,
+            opacity: 0.48,
           }}
         >
           <div
@@ -548,7 +574,7 @@ function renderLayer(layer: LayerSpec) {
           style={{
             left: spread(count, i),
             color: "var(--env-ground)",
-            opacity: 0.42,
+            opacity: 0.6,
           }}
         >
           <div

@@ -52,6 +52,15 @@ export default function Chapter({
       }
     >
       <EnvironmentScene environment={env} />
+      {/*
+        One light over the whole scene, above every piece of art and below the
+        copy. Thirteen cut-outs each carrying its own lighting is a collage;
+        the same sun falling across all of them at once is a painting. This
+        single pass does more for cohesion than any amount of per-piece
+        tuning, because it is the thing real illustration has that assembled
+        art never does.
+      */}
+      <div data-chapter-light="" aria-hidden />
       {seamTop && <div data-chapter-seam="top" aria-hidden />}
       <div className="relative z-[2]">{children}</div>
       {seamBottom && <div data-chapter-seam="bottom" aria-hidden />}

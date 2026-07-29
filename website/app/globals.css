@@ -385,6 +385,62 @@ body {
     );
 }
 
+/*
+  THE LIGHT PASS
+
+  Sits above all the scenery and below the copy, and blends with everything
+  under it at once: a low morning sun off the upper left, the cool shade that
+  implies on the opposite side, and a soft vignette closing the corners the
+  way a painted plate does.
+
+  `soft-light` is doing the work — light values in this gradient lift and warm
+  what is beneath, dark values deepen and cool it, so a single element both
+  lights and shades the scene. The chapter is `isolation: isolate`, so the
+  blend is contained to its own world and never touches the page.
+*/
+[data-chapter-light] {
+  position: absolute;
+  inset: 0;
+  z-index: -9;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  background:
+    /* the sun itself, low and off the top-left corner */
+    radial-gradient(
+      84% 76% at 1% -6%,
+      rgb(255 224 158 / 1),
+      rgb(255 224 158 / 0.5) 28%,
+      transparent 62%
+    ),
+    /* one broad shaft of it lying across the scene */
+    linear-gradient(
+      104deg,
+      transparent 8%,
+      rgb(255 232 176 / 0.42) 20%,
+      transparent 40%
+    ),
+    /*
+      The clearing. An illustrator leaves a quiet, brighter passage where the
+      words go rather than dropping a panel behind them; because this pass
+      sits under the copy, washing here lifts the scenery and leaves the type
+      untouched. It is what lets the rest of the art come up to full strength.
+    */
+    radial-gradient(
+      46% 52% at var(--clearing-x, 22%) 46%,
+      rgb(255 250 236 / 0.92),
+      rgb(255 250 236 / 0.45) 45%,
+      transparent 78%
+    ),
+    /* the cool side the sun implies */
+    linear-gradient(112deg, transparent 38%, rgb(46 78 84 / 0.5) 100%),
+    /* corners closing in, the way a painted plate does */
+    radial-gradient(
+      120% 98% at 50% 40%,
+      transparent 52%,
+      rgb(70 45 18 / 0.5) 100%
+    );
+}
+
 /* Chapters bleed into each other rather than butting up with a hard edge. */
 [data-chapter-seam] {
   position: absolute;

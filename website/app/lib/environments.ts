@@ -36,6 +36,8 @@ export type ArtKind =
   | "rocks"
   | "waterfall"
   | "sun"
+  /** Dust caught in the sun. Not art — light. */
+  | "motes"
   | "softHills"
   | "storybookTrees"
   | "bushes"
@@ -129,8 +131,12 @@ export const ENVIRONMENTS: Record<EnvironmentId, Environment> = {
       { art: "softHills", depth: 0.22 },
       { art: "treeline", depth: 0.3, count: 9, motion: "sway", minWidth: "md" },
       { art: "haze", depth: 0.36 },
+      { art: "motes", depth: 0.42, count: 7, minWidth: "md" },
       { art: "path", depth: 0.46 },
-      { art: "storybookTrees", depth: 0.6, count: 2, motion: "sway", minWidth: "lg" },
+      /* From `md`, not `lg`. These are the only things framing the
+         composition; without them a tablet got a headline floating in empty
+         sky, which is the widest the scene ever looks and the emptiest. */
+      { art: "storybookTrees", depth: 0.6, count: 2, motion: "sway", minWidth: "md" },
       { art: "bushes", depth: 0.7, count: 5, minWidth: "sm" },
       { art: "leaves", depth: 0.8, count: 6, motion: "fall" },
       /* A different silhouette down front. Without it the near field is all

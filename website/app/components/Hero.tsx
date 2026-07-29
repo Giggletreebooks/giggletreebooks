@@ -104,6 +104,22 @@ export default function Hero() {
                 className="pointer-events-none absolute inset-0 rounded-[2.5rem]"
                 style={{ boxShadow: "inset 0 0 44px 14px var(--env-haze)" }}
               />
+              {/*
+                The same sun, on the artwork. The chapter's light pass sits
+                under the content, so it lit every tree in the scene and left
+                this one object unlit — the one thing that gave it away as
+                something laid on top rather than standing in the world. Same
+                direction, same warmth, gentler: this is brand artwork, so it
+                gets lit, not recoloured.
+              */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 rounded-[2.5rem] mix-blend-soft-light"
+                style={{
+                  background:
+                    "radial-gradient(82% 72% at 4% 0%, rgb(255 226 168 / 0.6), transparent 62%), linear-gradient(112deg, transparent 46%, rgb(46 78 84 / 0.26) 100%)",
+                }}
+              />
             </div>
           </div>
         </div>
