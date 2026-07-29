@@ -10,6 +10,7 @@ export default function PageHero({
   title,
   description,
   aside,
+  seamBottom = true,
   children,
 }: {
   /** The world this page header sits in. */
@@ -19,6 +20,8 @@ export default function PageHero({
   eyebrow?: string;
   title: string;
   description?: string;
+  /** False when the next chapter continues the same world. */
+  seamBottom?: boolean;
   /** Optional artwork column; the header goes two-up when present. */
   aside?: React.ReactNode;
   children?: React.ReactNode;
@@ -26,7 +29,7 @@ export default function PageHero({
   return (
     // No bottom border: the following Section supplies the divider, and two
     // adjacent 1px borders read as a 2px rule.
-    <Chapter environment={environment} seamTop={false}>
+    <Chapter environment={environment} seamTop={false} seamBottom={seamBottom}>
       <div
         className={`mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:py-24${
           aside

@@ -20,6 +20,7 @@ export default function ChapterSection({
   environment,
   from,
   index,
+  eyebrow,
   title,
   description,
   action,
@@ -30,8 +31,10 @@ export default function ChapterSection({
   environment: EnvironmentId;
   /** The world above this one, so the seam cross-dissolves out of it. */
   from?: EnvironmentId;
-  /** Position in the journey, rendered as a numeral. */
-  index: number;
+  /** Position in a numbered journey. Omit on pages that aren't a journey. */
+  index?: number;
+  /** Replaces the world label. */
+  eyebrow?: string;
   title: string;
   description?: string;
   /** Closing call to action, spaced consistently across chapters. */
@@ -51,13 +54,24 @@ export default function ChapterSection({
     >
       <Reveal className="mx-auto max-w-6xl px-6 py-24 sm:py-28 lg:py-36">
         <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium tracking-[0.18em] uppercase">
-          <span style={{ color: "var(--env-accent)" }}>
-            Chapter {NUMERALS[index - 1] ?? index}
+          {index !== undefined && (
+            <>
+              <span style={{ color: "var(--env-accent)" }}>
+                Chapter {NUMERALS[index - 1] ?? index}
+              </span>
+              <span aria-hidden className="opacity-30">
+                ·
+              </span>
+            </>
+          )}
+          <span
+            style={
+              index === undefined ? { color: "var(--env-accent)" } : undefined
+            }
+            className={index === undefined ? undefined : "text-muted"}
+          >
+            {eyebrow ?? env.label}
           </span>
-          <span aria-hidden className="opacity-30">
-            ·
-          </span>
-          <span className="text-muted">{env.label}</span>
         </p>
 
         <h2 className="mt-5 max-w-3xl font-display text-3xl leading-[1.1] font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl">

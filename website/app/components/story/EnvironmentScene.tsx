@@ -1,11 +1,15 @@
+import Barn from "@/app/components/decor/art/Barn";
 import Bird from "@/app/components/decor/art/Bird";
 import Butterfly from "@/app/components/decor/art/Butterfly";
 import Cloud from "@/app/components/decor/art/Cloud";
+import Fence from "@/app/components/decor/art/Fence";
 import Flower from "@/app/components/decor/art/Flower";
 import Grass from "@/app/components/decor/art/Grass";
 import Hills from "@/app/components/decor/art/Hills";
 import Leaf from "@/app/components/decor/art/Leaf";
+import Rocks from "@/app/components/decor/art/Rocks";
 import Tree from "@/app/components/decor/art/Tree";
+import Waterfall from "@/app/components/decor/art/Waterfall";
 import DecorItem from "@/app/components/decor/DecorItem";
 import DecorLayer from "@/app/components/decor/DecorLayer";
 import ParallaxLayer from "@/app/components/story/ParallaxLayer";
@@ -196,6 +200,51 @@ function renderLayer(layer: LayerSpec) {
               <Grass className="h-full w-full" />
             </DecorItem>
           );
+
+    case "barn":
+      return (
+        <DecorItem
+          className="right-[6%] bottom-[10%] h-32 w-44 lg:h-40 lg:w-56"
+          style={{ color: "var(--env-accent)", opacity: 0.17 }}
+        >
+          <Barn className="h-full w-full" />
+        </DecorItem>
+      );
+
+    case "fences":
+      return (
+        <DecorItem
+          className="inset-x-0 bottom-[6%] h-10 sm:h-12"
+          style={{ color: "var(--env-ground)", opacity: 0.2 }}
+        >
+          <Fence className="h-full w-full" />
+        </DecorItem>
+      );
+
+    case "rocks":
+      return items.map((i) => (
+        <DecorItem
+          key={i}
+          className="bottom-[2%] h-10 w-20 sm:h-12 sm:w-28"
+          style={{
+            [i % 2 === 0 ? "left" : "right"]: `${6 + i * 4}%`,
+            color: "var(--env-ground)",
+            opacity: 0.22,
+          }}
+        >
+          <Rocks className="h-full w-full" />
+        </DecorItem>
+      ));
+
+    case "waterfall":
+      return (
+        <DecorItem
+          className="top-[8%] left-[7%] h-[46%] w-14 rounded-b-full xl:w-20"
+          style={{ color: "var(--env-sky)", opacity: 0.55 }}
+        >
+          <Waterfall className="h-full w-full" />
+        </DecorItem>
+      );
 
     case "butterflies":
       return items.map((i) => (

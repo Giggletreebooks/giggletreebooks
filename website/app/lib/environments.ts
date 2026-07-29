@@ -15,7 +15,7 @@ import type { DecorMotion } from "@/app/components/decor/DecorItem";
 export type EnvironmentId =
   | "forest"
   | "farm"
-  | "savanna"
+  | "wildwood"
   | "library"
   | "meadow"
   | "dusk";
@@ -30,7 +30,11 @@ export type ArtKind =
   | "grass"
   | "flowers"
   | "butterflies"
-  | "birds";
+  | "birds"
+  | "barn"
+  | "fences"
+  | "rocks"
+  | "waterfall";
 
 export type Palette = {
   /** Wash at the top of the chapter, and what the next chapter fades from. */
@@ -70,7 +74,7 @@ export type Environment = {
  * distance reads without expensive blur filters.
  *
  * Each world gets a different mix on purpose — the farm is open and bright,
- * the savanna is hazy and sparse, the library is quiet. If every world used
+ * the wildwood is dense and shaded, the library is quiet. If every world used
  * the same layer list the journey would feel recoloured rather than travelled.
  */
 export const ENVIRONMENTS: Record<EnvironmentId, Environment> = {
@@ -111,31 +115,36 @@ export const ENVIRONMENTS: Record<EnvironmentId, Environment> = {
       { art: "clouds", depth: 0.1, count: 4, motion: "drift" },
       { art: "birds", depth: 0.15, count: 2, motion: "glide", minWidth: "sm" },
       { art: "hills", depth: 0.2 },
+      { art: "barn", depth: 0.4, minWidth: "md" },
       { art: "treeline", depth: 0.35, count: 5, motion: "sway", minWidth: "md" },
-      { art: "butterflies", depth: 0.8, count: 2, motion: "flutter", minWidth: "sm" },
+      { art: "fences", depth: 0.65 },
+      { art: "butterflies", depth: 0.8, count: 3, motion: "flutter", minWidth: "sm" },
       { art: "grass", depth: 0.9 },
       { art: "grass", depth: 1, count: 4, motion: "sway" },
-      { art: "flowers", depth: 1, count: 4, motion: "sway", minWidth: "sm" },
+      { art: "flowers", depth: 1, count: 5, motion: "sway", minWidth: "sm" },
     ],
   },
-  savanna: {
-    id: "savanna",
-    label: "The Wild",
-    mood: "Tall grass and long afternoons.",
+  wildwood: {
+    id: "wildwood",
+    label: "The Wildwood",
+    mood: "Deep trees, cool rocks, and water somewhere close.",
     palette: {
-      sky: "#fbf0dc",
-      haze: "#f6e0bb",
-      foliage: "#8a7a34",
-      ground: "#b09447",
-      accent: "#c2702a",
+      sky: "#e4eee6",
+      haze: "#eef3e2",
+      foliage: "#25562a",
+      ground: "#4a6b3c",
+      accent: "#b0762c",
     },
     layers: [
       { art: "clouds", depth: 0.08, count: 2, motion: "drift" },
       { art: "birds", depth: 0.14, count: 3, motion: "glide", minWidth: "sm" },
-      { art: "hills", depth: 0.2 },
-      { art: "trees", depth: 0.5, count: 2, motion: "sway", minWidth: "lg" },
+      { art: "treeline", depth: 0.28, count: 8, motion: "sway", minWidth: "md" },
+      { art: "waterfall", depth: 0.4, minWidth: "lg" },
+      { art: "trees", depth: 0.55, count: 2, motion: "sway", minWidth: "lg" },
+      { art: "leaves", depth: 0.75, count: 6, motion: "fall" },
+      { art: "rocks", depth: 0.88, count: 2 },
       { art: "grass", depth: 0.9 },
-      { art: "grass", depth: 1, count: 5, motion: "sway" },
+      { art: "grass", depth: 1, count: 4, motion: "sway" },
     ],
   },
   library: {

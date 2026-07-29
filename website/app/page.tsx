@@ -56,10 +56,10 @@ export default async function Home() {
       </ChapterSection>
 
       <ChapterSection
-        environment="savanna"
+        environment="wildwood"
         from="farm"
         index={3}
-        title="Past the fence, the grass grows tall."
+        title="Past the fence, the trees close in."
         description={`${wild?.bookCount ?? 0} stories from further out, where the animals are bigger and the afternoons are longer.`}
         action={
           <Link href="/books/wild-animals" className={BUTTON_SECONDARY}>
@@ -72,7 +72,7 @@ export default async function Home() {
 
       <ChapterSection
         environment="library"
-        from="savanna"
+        from="wildwood"
         index={4}
         title="Every book is built to be read twice."
         description="What parents, teachers, and small readers get out of each one — beyond the story itself."

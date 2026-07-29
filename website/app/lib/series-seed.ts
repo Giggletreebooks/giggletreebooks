@@ -31,6 +31,8 @@ export type SeriesSeed = {
   about?: string;
   /** Falls back to `DEFAULT_LEARNINGS` so a new series renders without them. */
   learnings?: Learning[];
+  /** Book title whose character greets visitors. Defaults to the first book. */
+  featuredCharacter?: string;
   /** Overrides the default of using the first book's cover. */
   coverImage?: string;
 };
@@ -89,7 +91,7 @@ export const SERIES_SEED: SeriesSeed[] = [
   },
   {
     slug: "wild-animals",
-    environment: "savanna",
+    environment: "wildwood",
     title: "Wild Animals",
     description: "Big cats, tall grass, and the quiet moments in between.",
     status: "available",

@@ -187,6 +187,21 @@ body {
   animation-timing-function: linear;
 }
 
+/* Falling water. The stream is two stacked copies; translating one full copy
+   height and looping makes it seamless. */
+[data-waterfall-stream] {
+  animation: decor-cascade var(--decor-duration, 2.6s) linear infinite;
+}
+
+@keyframes decor-cascade {
+  from {
+    transform: translate3d(0, -50%, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 /* Leaves: a long diagonal fall with a slow tumble. */
 [data-decor-item][data-decor-motion="fall"] {
   animation-name: decor-fall;
@@ -609,6 +624,7 @@ body {
   /* The world stays — it just stops moving. The art is the atmosphere; the
      motion is the enhancement. */
   [data-decor-item][data-decor-motion],
+  [data-waterfall-stream],
   [data-character] {
     animation: none;
     transform: none;
