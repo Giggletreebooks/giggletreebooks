@@ -1,5 +1,6 @@
 import Barn from "@/app/components/decor/art/Barn";
 import Bird from "@/app/components/decor/art/Bird";
+import Bush from "@/app/components/decor/art/Bush";
 import Butterfly from "@/app/components/decor/art/Butterfly";
 import Cloud from "@/app/components/decor/art/Cloud";
 import Fence from "@/app/components/decor/art/Fence";
@@ -8,10 +9,11 @@ import Grass from "@/app/components/decor/art/Grass";
 import Hills from "@/app/components/decor/art/Hills";
 import HillsSoft from "@/app/components/decor/art/HillsSoft";
 import Leaf from "@/app/components/decor/art/Leaf";
+import Path from "@/app/components/decor/art/Path";
 import Rocks from "@/app/components/decor/art/Rocks";
 import SunGlow from "@/app/components/decor/art/SunGlow";
 import Tree from "@/app/components/decor/art/Tree";
-import TreeLush from "@/app/components/decor/art/TreeLush";
+import TreeStorybook from "@/app/components/decor/art/TreeStorybook";
 import Waterfall from "@/app/components/decor/art/Waterfall";
 import DecorItem from "@/app/components/decor/DecorItem";
 import DecorLayer from "@/app/components/decor/DecorLayer";
@@ -131,23 +133,61 @@ function renderLayer(layer: LayerSpec) {
         </DecorItem>
       );
 
-    case "lushTrees":
+    case "haze":
+      /* Aerial perspective: everything behind this washes toward the sky. */
+      return (
+        <DecorItem
+          className="inset-x-0 bottom-0 h-[62%]"
+          style={{
+            background:
+              "linear-gradient(to top, transparent, var(--env-sky) 62%)",
+            opacity: 0.5,
+          }}
+        />
+      );
+
+    case "path":
+      return (
+        <DecorItem
+          className="inset-x-0 bottom-0 h-32 sm:h-44"
+          style={{ color: "var(--env-haze)", opacity: 0.5 }}
+        >
+          <Path className="h-full w-full" />
+        </DecorItem>
+      );
+
+    case "storybookTrees":
       return items.map((i) => (
         <DecorItem
           key={i}
           motion={layer.motion}
-          duration={vary(11, i, 2.6)}
+          duration={vary(12, i, 2.8)}
           delay={-i * 5}
-          angle="0.9deg"
-          className="bottom-[2%] h-80 w-60 xl:h-96 xl:w-72"
+          angle="0.8deg"
+          className="bottom-0 h-[22rem] w-64 xl:h-[26rem] xl:w-80"
           style={{
-            /* Outer edges only, so the headline column stays clear. */
-            [i % 2 === 0 ? "left" : "right"]: "-4rem",
+            /* Outer edges only, so the headline column keeps clear ground. */
+            [i % 2 === 0 ? "left" : "right"]: "-5rem",
             color: "var(--env-foliage)",
-            opacity: 0.26,
+            opacity: 0.34,
           }}
         >
-          <TreeLush className="h-full w-full" />
+          <TreeStorybook className="h-full w-full" />
+        </DecorItem>
+      ));
+
+    case "bushes":
+      return items.map((i) => (
+        <DecorItem
+          key={i}
+          className="bottom-[3%] h-14 w-28 sm:h-16 sm:w-36"
+          style={{
+            left: spread(count, i),
+            color: "var(--env-foliage)",
+            opacity: 0.24,
+          }}
+        >
+          <Bush className="h-full w-full" />
         </DecorItem>
       ));
 

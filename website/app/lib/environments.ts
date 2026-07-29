@@ -37,7 +37,10 @@ export type ArtKind =
   | "waterfall"
   | "sun"
   | "softHills"
-  | "lushTrees";
+  | "storybookTrees"
+  | "bushes"
+  | "path"
+  | "haze";
 
 export type Palette = {
   /** Wash at the top of the chapter, and what the next chapter fades from. */
@@ -50,6 +53,8 @@ export type Palette = {
   ground: string;
   /** Chapter numeral, flower centres, small highlights. */
   accent: string;
+  /** Trunks and branches. A green trunk is what made the old trees clip-art. */
+  bark: string;
 };
 
 export type LayerSpec = {
@@ -91,22 +96,32 @@ export const ENVIRONMENTS: Record<EnvironmentId, Environment> = {
       foliage: "#2c6a22",
       ground: "#4a8a33",
       accent: "#d99a33",
+      bark: "#5c3a1e",
     },
     /*
-      The entrance to the world, so it carries the deepest stack: nine layers
-      from the sun down to the flowers at your feet, each travelling at its own
-      rate. Depth here is doing the "wow" — a flat illustration with the same
-      art would read as a background image.
+      Read as three bands of distance:
+
+        BACKGROUND  sun, clouds, birds, hills, far treeline  (depth <= 0.35)
+        — atmospheric haze washes everything above it —
+        MIDGROUND   storybook trees, bushes, the path        (depth 0.5-0.7)
+        FOREGROUND  leaves, butterflies, grass, flowers      (depth >= 0.8)
+
+      The haze layer sitting between background and midground is what sells the
+      distance: far trees lose contrast toward the sky exactly as they do in
+      air, without the cost of blurring a dozen elements.
     */
     layers: [
       { art: "sun", depth: 0.04 },
       { art: "clouds", depth: 0.1, count: 4, motion: "drift" },
       { art: "birds", depth: 0.16, count: 3, motion: "glide", minWidth: "sm" },
       { art: "softHills", depth: 0.22 },
-      { art: "treeline", depth: 0.34, count: 9, motion: "sway", minWidth: "md" },
-      { art: "lushTrees", depth: 0.58, count: 2, motion: "sway", minWidth: "lg" },
-      { art: "leaves", depth: 0.76, count: 6, motion: "fall" },
-      { art: "butterflies", depth: 0.86, count: 3, motion: "flutter", minWidth: "sm" },
+      { art: "treeline", depth: 0.3, count: 9, motion: "sway", minWidth: "md" },
+      { art: "haze", depth: 0.36 },
+      { art: "path", depth: 0.46 },
+      { art: "storybookTrees", depth: 0.6, count: 2, motion: "sway", minWidth: "lg" },
+      { art: "bushes", depth: 0.7, count: 3, minWidth: "sm" },
+      { art: "leaves", depth: 0.8, count: 6, motion: "fall" },
+      { art: "butterflies", depth: 0.88, count: 3, motion: "flutter", minWidth: "sm" },
       { art: "grass", depth: 0.92 },
       { art: "grass", depth: 1, count: 4, motion: "sway" },
       { art: "flowers", depth: 1, count: 5, motion: "sway", minWidth: "sm" },
@@ -122,6 +137,7 @@ export const ENVIRONMENTS: Record<EnvironmentId, Environment> = {
       foliage: "#5d8c33",
       ground: "#7aa33f",
       accent: "#d08b2c",
+      bark: "#6b4a24",
     },
     layers: [
       { art: "clouds", depth: 0.1, count: 4, motion: "drift" },
@@ -146,6 +162,7 @@ export const ENVIRONMENTS: Record<EnvironmentId, Environment> = {
       foliage: "#25562a",
       ground: "#4a6b3c",
       accent: "#b0762c",
+      bark: "#4a2f18",
     },
     layers: [
       { art: "clouds", depth: 0.08, count: 2, motion: "drift" },
@@ -169,6 +186,7 @@ export const ENVIRONMENTS: Record<EnvironmentId, Environment> = {
       foliage: "#7a4a24",
       ground: "#6b4020",
       accent: "#b4622a",
+      bark: "#5a3419",
     },
     layers: [
       { art: "clouds", depth: 0.1, count: 2, motion: "drift" },
@@ -186,6 +204,7 @@ export const ENVIRONMENTS: Record<EnvironmentId, Environment> = {
       foliage: "#4f8a35",
       ground: "#6aa143",
       accent: "#d2953a",
+      bark: "#63421f",
     },
     layers: [
       { art: "clouds", depth: 0.1, count: 3, motion: "drift" },
@@ -206,6 +225,7 @@ export const ENVIRONMENTS: Record<EnvironmentId, Environment> = {
       foliage: "#3d4a2c",
       ground: "#4a4230",
       accent: "#b8722c",
+      bark: "#3a2a18",
     },
     layers: [
       { art: "birds", depth: 0.12, count: 2, motion: "glide", minWidth: "sm" },

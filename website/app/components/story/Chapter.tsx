@@ -46,6 +46,7 @@ export default function Chapter({
           "--env-foliage": env.palette.foliage,
           "--env-ground": env.palette.ground,
           "--env-accent": env.palette.accent,
+          "--env-bark": env.palette.bark,
           ...(previous && { "--from-sky": previous.palette.sky }),
         } as CSSProperties
       }

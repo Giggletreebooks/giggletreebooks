@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Geist } from "next/font/google";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
+import SceneDefs from "@/app/components/decor/SceneDefs";
 import SmoothScroll from "@/app/components/story/SmoothScroll";
 import { logo } from "@/app/lib/assets";
 import "./globals.css";
@@ -43,6 +44,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
       </head>
       <body className="flex min-h-full flex-col font-sans">
+        <SceneDefs />
         <SmoothScroll />
         <Header />
         <main className="flex-1">{children}</main>
