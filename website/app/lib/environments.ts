@@ -112,19 +112,22 @@ export const ENVIRONMENTS: Record<EnvironmentId, Environment> = {
     */
     layers: [
       { art: "sun", depth: 0.04 },
-      { art: "clouds", depth: 0.1, count: 4, motion: "drift" },
+      { art: "clouds", depth: 0.1, count: 2, motion: "drift" },
       { art: "birds", depth: 0.16, count: 3, motion: "glide", minWidth: "sm" },
       { art: "softHills", depth: 0.22 },
       { art: "treeline", depth: 0.3, count: 9, motion: "sway", minWidth: "md" },
       { art: "haze", depth: 0.36 },
       { art: "path", depth: 0.46 },
       { art: "storybookTrees", depth: 0.6, count: 2, motion: "sway", minWidth: "lg" },
-      { art: "bushes", depth: 0.7, count: 3, minWidth: "sm" },
+      { art: "bushes", depth: 0.7, count: 5, minWidth: "sm" },
       { art: "leaves", depth: 0.8, count: 6, motion: "fall" },
+      /* A different silhouette down front. Without it the near field is all
+         green mounds and reads as one shape repeated. */
+      { art: "rocks", depth: 0.85, count: 2, minWidth: "md" },
       { art: "butterflies", depth: 0.88, count: 3, motion: "flutter", minWidth: "sm" },
       { art: "grass", depth: 0.92 },
-      { art: "grass", depth: 1, count: 4, motion: "sway" },
-      { art: "flowers", depth: 1, count: 5, motion: "sway", minWidth: "sm" },
+      { art: "grass", depth: 1, count: 6, motion: "sway" },
+      { art: "flowers", depth: 1, count: 6, motion: "sway", minWidth: "sm" },
     ],
   },
   farm: {
@@ -140,7 +143,7 @@ export const ENVIRONMENTS: Record<EnvironmentId, Environment> = {
       bark: "#6b4a24",
     },
     layers: [
-      { art: "clouds", depth: 0.1, count: 4, motion: "drift" },
+      { art: "clouds", depth: 0.1, count: 2, motion: "drift" },
       { art: "birds", depth: 0.15, count: 2, motion: "glide", minWidth: "sm" },
       { art: "hills", depth: 0.2 },
       { art: "barn", depth: 0.4, minWidth: "md" },
@@ -207,7 +210,7 @@ export const ENVIRONMENTS: Record<EnvironmentId, Environment> = {
       bark: "#63421f",
     },
     layers: [
-      { art: "clouds", depth: 0.1, count: 3, motion: "drift" },
+      { art: "clouds", depth: 0.1, count: 2, motion: "drift" },
       { art: "butterflies", depth: 0.75, count: 3, motion: "flutter", minWidth: "sm" },
       { art: "leaves", depth: 0.7, count: 3, motion: "fall" },
       { art: "grass", depth: 0.9 },

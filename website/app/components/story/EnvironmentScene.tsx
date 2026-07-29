@@ -88,6 +88,19 @@ function vary(base: number, index: number, step = 1.7): number {
   return base + ((index * step) % (base * 0.5));
 }
 
+/**
+ * Per-index size and handedness for repeated art.
+ *
+ * There is one painting per kind, so a row of nine is the same nine pixels
+ * nine times — the single loudest tell that a scene is assembled rather than
+ * illustrated. Scaling from the base and flipping alternate copies costs
+ * nothing and breaks the row. Deterministic, so server and client agree.
+ */
+function varied(index: number, spread = 0.26): string {
+  const scale = 1 - spread / 2 + ((index * 0.37) % 1) * spread;
+  return `scaleX(${index % 2 ? -scale : scale}) scaleY(${scale})`;
+}
+
 function renderLayer(layer: LayerSpec) {
   const count = layer.count ?? 1;
   const items = Array.from({ length: count }, (_, i) => i);
@@ -104,27 +117,37 @@ function renderLayer(layer: LayerSpec) {
             Explicit height: a painted cloud fills its box, and a box with
             only a width would be zero tall.
 
-            A phone gets one cloud. Its sky is barely wider than a single
-            cloud and barely taller, so a full set crosses the headline
-            instead of sitting behind it.
+            Few and large, not many and small. Repeating one painting across
+            the sky reads as a tiled asset; two big soft ones read as weather.
+            A phone gets one — its sky is barely wider than a single cloud.
           */
-          className={`h-[4.5rem] w-28 sm:h-[6.75rem] sm:w-48 ${i > 0 ? "hidden sm:block" : ""}`}
+          className={`h-[6.25rem] w-44 sm:h-[9rem] sm:w-64 lg:h-[11rem] lg:w-[19.5rem] ${i > 0 ? "hidden sm:block" : ""}`}
           style={{
             /* Spread across the sky. Drift only travels a cloud's own width,
                so clouds parked at a shared edge stay stacked on each other —
-               four copies of one painting piled up read as a smudge. */
+               copies of one painting piled up read as a smudge. */
             left: spread(count, i),
             /* Fixed offsets, not percentages: clouds belong near the top of
                the sky. A percentage walks them down a tall chapter and parks
                them on the headline. */
-            top: `${1.5 + i * 3.5}rem`,
+            top: `${0.5 + i * 3.5}rem`,
             color: "var(--surface)",
-            opacity: 0.75 - i * 0.12,
+            /* Faint enough to sit in the air rather than on top of it. */
+            opacity: 0.4 - i * 0.12,
           }}
         >
-          <Scenery name="cloud" sizes="12rem">
-            <Cloud className="h-full w-full" />
-          </Scenery>
+          {/*
+            Mirrored alternately and softened. One painting used twice is
+            obvious side by side; flipped and blurred it reads as two banks of
+            the same weather.
+          */}
+          <div
+            className={`h-full w-full blur-[3px] ${i % 2 ? "-scale-x-100" : ""}`}
+          >
+            <Scenery name="cloud" sizes="24rem">
+              <Cloud className="h-full w-full" />
+            </Scenery>
+          </div>
         </DecorItem>
       ));
 
@@ -154,14 +177,20 @@ function renderLayer(layer: LayerSpec) {
       );
 
     case "haze":
-      /* Aerial perspective: everything behind this washes toward the sky. */
+      /*
+        Aerial perspective: everything behind this washes toward the sky.
+
+        Both ends fade. Held at full strength to the top of its box, the wash
+        ended on a straight horizontal line across the whole chapter — the
+        single most obvious layer boundary in the scene.
+      */
       return (
         <DecorItem
-          className="inset-x-0 bottom-0 h-[62%]"
+          className="inset-x-0 bottom-0 h-[72%]"
           style={{
             background:
-              "linear-gradient(to top, transparent, var(--env-sky) 62%)",
-            opacity: 0.5,
+              "linear-gradient(to top, transparent 0%, var(--env-sky) 42%, transparent 100%)",
+            opacity: 0.55,
           }}
         />
       );
@@ -186,12 +215,16 @@ function renderLayer(layer: LayerSpec) {
           duration={vary(12, i, 2.8)}
           delay={-i * 5}
           angle="0.8deg"
+          rooted
+          rootFade="15%"
           className="bottom-0 h-[22rem] w-64 xl:h-[26rem] xl:w-80"
           style={{
-            /* Outer edges only, so the headline column keeps clear ground. */
-            [i % 2 === 0 ? "left" : "right"]: "-5rem",
+            /* Outer edges only, so the headline column keeps clear ground.
+               Held further out than the canopy is wide: at full strength the
+               foliage was reaching into the body copy. */
+            [i % 2 === 0 ? "left" : "right"]: "-7rem",
             color: "var(--env-foliage)",
-            opacity: 0.34,
+            opacity: 0.4,
           }}
         >
           <Scenery name="tree-oak" sizes="(min-width: 1280px) 20rem, 16rem">
@@ -204,16 +237,24 @@ function renderLayer(layer: LayerSpec) {
       return items.map((i) => (
         <DecorItem
           key={i}
-          className="bottom-[3%] h-14 w-28 sm:h-16 sm:w-36"
+          rooted
+          rootFade="24%"
+          className="h-14 w-28 sm:h-16 sm:w-36"
           style={{
             left: spread(count, i),
+            bottom: `${1 + ((i * 1.7) % 2)}%`,
             color: "var(--env-foliage)",
-            opacity: 0.24,
+            opacity: 0.34,
           }}
         >
-          <Scenery name="bush" sizes="9rem">
-            <Bush className="h-full w-full" />
-          </Scenery>
+          <div
+            className="h-full w-full origin-bottom"
+            style={{ transform: varied(i, 0.3) }}
+          >
+            <Scenery name="bush" sizes="9rem">
+              <Bush className="h-full w-full" />
+            </Scenery>
+          </div>
         </DecorItem>
       ));
 
@@ -237,16 +278,33 @@ function renderLayer(layer: LayerSpec) {
           duration={vary(9, i)}
           delay={-i * 1.7}
           angle="0.5deg"
-          className="bottom-[7%] h-16 w-12 lg:h-20 lg:w-16"
+          rooted
+          /*
+            Deep enough to swallow the trunk entirely. At this distance a tree
+            is a mass of canopy on a ridge — a visible trunk just draws a thin
+            line that stops in mid-air, which is what made these read as
+            stickers on the hillside.
+          */
+          rootFade="52%"
+          className="h-16 w-12 lg:h-20 lg:w-16"
           style={{
             left: spread(count, i),
+            /* Rolling ground, so no two stand on the same line. */
+            bottom: `${4 + ((i * 2.3) % 3)}%`,
             color: "var(--env-foliage)",
-            opacity: 0.16,
+            /* Furthest thing with a shape. Anything stronger and the
+               distance collapses. */
+            opacity: 0.15,
           }}
         >
-          <Scenery name="tree-distant" sizes="5rem">
-            <Tree className="h-full w-full" />
-          </Scenery>
+          <div
+            className="h-full w-full origin-bottom"
+            style={{ transform: varied(i, 0.34) }}
+          >
+            <Scenery name="tree-distant" sizes="5rem">
+              <Tree className="h-full w-full" />
+            </Scenery>
+          </div>
         </DecorItem>
       ));
 
@@ -258,12 +316,14 @@ function renderLayer(layer: LayerSpec) {
           duration={vary(10, i, 2.4)}
           delay={-i * 4}
           angle="1.1deg"
-          className="bottom-[4%] h-64 w-40 xl:h-72 xl:w-48"
+          rooted
+          rootFade="16%"
+          className="bottom-[1%] h-64 w-40 xl:h-72 xl:w-48"
           style={{
             /* Held to the outer edges so text stays clear. */
             [i % 2 === 0 ? "left" : "right"]: "-2.5rem",
             color: "var(--env-foliage)",
-            opacity: 0.22,
+            opacity: 0.32,
           }}
         >
           <Scenery name="tree-distant" sizes="5rem">
@@ -306,18 +366,29 @@ function renderLayer(layer: LayerSpec) {
               style={{
                 left: spread(count, i),
                 color: "var(--env-ground)",
-                opacity: 0.26,
+                /* Nearest thing in the scene, so the strongest. */
+                opacity: 0.38,
               }}
             >
-              <Scenery name="grass" sizes="8rem">
-                <Grass className="h-full w-full" />
-              </Scenery>
+              <div
+                className="h-full w-full origin-bottom"
+                style={{ transform: varied(i, 0.22) }}
+              >
+                <Scenery name="grass" sizes="8rem">
+                  <Grass className="h-full w-full" />
+                </Scenery>
+              </div>
             </DecorItem>
           ))
         : (
+            /*
+              The turf the whole chapter stands on. Deep enough to swallow the
+              base of everything rooted in front of it — a 40px strip left
+              trunks ending in mid-air.
+            */
             <DecorItem
-              className="inset-x-0 bottom-0 h-10 sm:h-14"
-              style={{ color: "var(--env-ground)", opacity: 0.18 }}
+              className="inset-x-0 bottom-0 h-20 sm:h-28"
+              style={{ color: "var(--env-ground)", opacity: 0.3 }}
             >
               <Scenery name="grass" sizes="100vw" fit="stretch">
                 <Grass className="h-full w-full" />
@@ -328,8 +399,10 @@ function renderLayer(layer: LayerSpec) {
     case "barn":
       return (
         <DecorItem
-          className="right-[6%] bottom-[10%] h-32 w-44 lg:h-40 lg:w-56"
-          style={{ color: "var(--env-accent)", opacity: 0.17 }}
+          rooted
+          rootFade="12%"
+          className="right-[6%] bottom-[7%] h-32 w-44 lg:h-40 lg:w-56"
+          style={{ color: "var(--env-accent)", opacity: 0.26 }}
         >
           <Scenery name="barn" sizes="14rem">
             <Barn className="h-full w-full" />
@@ -340,8 +413,10 @@ function renderLayer(layer: LayerSpec) {
     case "fences":
       return (
         <DecorItem
-          className="inset-x-0 bottom-[6%] h-10 sm:h-12"
-          style={{ color: "var(--env-ground)", opacity: 0.2 }}
+          rooted
+          rootFade="16%"
+          className="inset-x-0 bottom-[5%] h-10 sm:h-12"
+          style={{ color: "var(--env-ground)", opacity: 0.28 }}
         >
           <Scenery name="fence" sizes="100vw" fit="stretch">
             <Fence className="h-full w-full" />
@@ -353,16 +428,23 @@ function renderLayer(layer: LayerSpec) {
       return items.map((i) => (
         <DecorItem
           key={i}
-          className="bottom-[2%] h-10 w-20 sm:h-12 sm:w-28"
+          rooted
+          rootFade="20%"
+          className="bottom-[1%] h-10 w-20 sm:h-12 sm:w-28"
           style={{
             [i % 2 === 0 ? "left" : "right"]: `${6 + i * 4}%`,
             color: "var(--env-ground)",
-            opacity: 0.22,
+            opacity: 0.32,
           }}
         >
-          <Scenery name="rocks" sizes="7rem">
-            <Rocks className="h-full w-full" />
-          </Scenery>
+          <div
+            className="h-full w-full origin-bottom"
+            style={{ transform: varied(i, 0.3) }}
+          >
+            <Scenery name="rocks" sizes="7rem">
+              <Rocks className="h-full w-full" />
+            </Scenery>
+          </div>
         </DecorItem>
       ));
 
@@ -423,20 +505,27 @@ function renderLayer(layer: LayerSpec) {
           duration={vary(5.8, i, 0.7)}
           delay={-i * 2}
           angle="2.4deg"
+          rooted
+          rootFade="22%"
           className="bottom-0 h-12 w-7"
           style={{
             left: spread(count, i),
             color: "var(--env-ground)",
-            opacity: 0.32,
+            opacity: 0.42,
           }}
         >
-          <Scenery name="flowers" sizes="3rem">
-            <Flower
-              className="h-full w-full"
-              petal="var(--env-haze)"
-              centre="var(--env-accent)"
-            />
-          </Scenery>
+          <div
+            className="h-full w-full origin-bottom"
+            style={{ transform: varied(i, 0.3) }}
+          >
+            <Scenery name="flowers" sizes="3rem">
+              <Flower
+                className="h-full w-full"
+                petal="var(--env-haze)"
+                centre="var(--env-accent)"
+              />
+            </Scenery>
+          </div>
         </DecorItem>
       ));
   }

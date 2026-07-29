@@ -148,6 +148,25 @@ body {
 }
 
 /*
+  Anything standing on the ground dissolves at its base, so trunks and stems
+  meet the terrain instead of ending on a cut edge. This is the difference
+  between a painted scene and a pile of cutouts: real ground eats the bottom
+  of whatever grows out of it.
+*/
+[data-decor-item][data-rooted] {
+  -webkit-mask-image: linear-gradient(
+    to top,
+    transparent 0,
+    #000 var(--decor-root-fade, 14%)
+  );
+  mask-image: linear-gradient(
+    to top,
+    transparent 0,
+    #000 var(--decor-root-fade, 14%)
+  );
+}
+
+/*
   Ambient motions. Every one is transform/opacity only, so the compositor
   handles them without layout or paint work. Duration, delay, and travel are
   per-item variables — two trees share a rule but never move in lockstep.

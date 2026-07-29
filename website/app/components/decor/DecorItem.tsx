@@ -39,6 +39,14 @@ export default function DecorItem({
   spin,
   /** drift/fall: peak opacity. */
   opacity,
+  /**
+   * Anything standing on the ground. Dissolves its base into the terrain
+   * instead of ending on a cut edge — a trunk that stops dead reads as a
+   * sticker on the sky, however well it is painted.
+   */
+  rooted,
+  /** How much of the base dissolves, e.g. "18%". Taller art needs less. */
+  rootFade,
   style,
 }: {
   children?: React.ReactNode;
@@ -52,12 +60,15 @@ export default function DecorItem({
   fallDistance?: string;
   spin?: string;
   opacity?: number;
+  rooted?: boolean;
+  rootFade?: string;
   style?: CSSProperties;
 }) {
   return (
     <div
       data-decor-item=""
       data-decor-motion={motion}
+      data-rooted={rooted ? "" : undefined}
       className={className}
       style={
         {
@@ -71,6 +82,7 @@ export default function DecorItem({
           }),
           ...(spin !== undefined && { "--decor-spin": spin }),
           ...(opacity !== undefined && { "--decor-opacity": opacity }),
+          ...(rootFade !== undefined && { "--decor-root-fade": rootFade }),
           ...style,
         } as CSSProperties
       }

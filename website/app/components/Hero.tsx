@@ -49,6 +49,12 @@ export default function Hero() {
             The logo stage. 5:4 crops the animation's wide framing so the
             lockup fills the frame, and the wider column lets it run to
             max-w-2xl — together about 40% larger than before.
+
+            No mat, no plates, no border. A frame around an illustration makes
+            the page read as a gallery of assets; the animation should sit in
+            the world with the trees. All that is left is light behind it and
+            a shadow under it, so it reads as resting in the scene rather than
+            mounted on it.
           */}
           <div
             data-hero-stage=""
@@ -57,29 +63,16 @@ export default function Hero() {
             {/* Soft light behind the glass, bleeding past its edges. */}
             <div
               aria-hidden
-              className="pointer-events-none absolute -inset-10 -z-10 rounded-[50%] blur-3xl"
+              className="pointer-events-none absolute -inset-12 -z-10 rounded-[50%] blur-3xl"
               style={{
                 background:
-                  "radial-gradient(closest-side, var(--env-haze), transparent 78%)",
-                opacity: 0.9,
+                  "radial-gradient(closest-side, var(--env-haze), transparent 76%)",
+                opacity: 0.95,
               }}
             />
-            {/* Two offset plates behind the stage, for physical depth. */}
-            <div
-              aria-hidden
-              className="absolute inset-0 -rotate-3 rounded-[2.75rem] border border-border/70"
-              style={{ background: "var(--env-sky)", opacity: 0.75 }}
-            />
-            <div
-              aria-hidden
-              className="absolute inset-0 rotate-2 rounded-[2.75rem] border border-border/50 bg-white/60"
-            />
 
-            {/* The frame itself: a warm mat around the picture. */}
-            <div className="relative rounded-[2.75rem] border border-border bg-gradient-to-b from-white to-brand-soft/40 p-2.5 shadow-[0_40px_80px_-32px_rgb(59_28_0_/_0.45)] sm:p-3">
-              <div className="relative aspect-5/4 overflow-hidden rounded-[2rem] bg-white ring-1 ring-black/5">
-                <HeroLogoVideo />
-              </div>
+            <div className="relative aspect-5/4 overflow-hidden rounded-[2.5rem] shadow-[0_36px_72px_-28px_rgb(59_28_0_/_0.38)] ring-1 ring-black/5">
+              <HeroLogoVideo />
             </div>
           </div>
         </div>

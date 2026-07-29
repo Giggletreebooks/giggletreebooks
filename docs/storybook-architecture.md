@@ -24,7 +24,7 @@ Each layer owns exactly one thing, which is what keeps them composable:
 | `Chapter` | palette, seams, content slot | what art appears |
 | `EnvironmentScene` | turning a layer spec into art | scroll behaviour |
 | `ParallaxLayer` | scroll-linked depth travel | ambient motion |
-| `DecorItem` | ambient motion (sway, drift, fall) | position in depth |
+| `DecorItem` | ambient motion (sway, drift, fall), rooting | position in depth |
 
 **Parallax and ambient motion sit on different elements on purpose.** Both are
 CSS `transform`; on one element the second would overwrite the first. A layer
@@ -85,6 +85,26 @@ That series' page now has its own living world. No component changed.
 
 **Depth reads through scale and opacity, not blur.** Blur on a dozen layers is
 expensive to composite; opacity is free.
+
+### Rooting
+
+Anything that stands on the ground passes `rooted` to its `DecorItem`, which
+dissolves its base into the terrain with a mask. A trunk that stops on a cut
+edge reads as a sticker on the sky however well it is painted, and no amount
+of overlap fixes it — the ground bands are semi-transparent, so they never
+fully hide what is behind them.
+
+`rootFade` sets how much of the base goes: `15%` for a foreground oak, `52%`
+for a distant tree, where the trunk should vanish entirely and leave a mass of
+canopy on the ridge.
+
+### Breaking the row
+
+There is one painting per kind, so nine distant trees are the same pixels nine
+times — the loudest tell that a scene is assembled rather than illustrated.
+Repeated art is scaled and flipped per index by `varied()`, and given a little
+vertical jitter, so no two copies match. It is deterministic, so the static
+export stays stable between builds.
 
 ### Adding new art
 
