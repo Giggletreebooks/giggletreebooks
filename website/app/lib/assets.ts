@@ -16,6 +16,7 @@ const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 export const assetDirs = {
   branding: `${BASE}/branding`,
   covers: `${BASE}/covers`,
+  characters: `${BASE}/characters`,
   printables: `${BASE}/printables`,
 } as const;
 

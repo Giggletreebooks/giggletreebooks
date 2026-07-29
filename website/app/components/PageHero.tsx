@@ -1,8 +1,10 @@
-import ForestScene from "@/app/components/decor/ForestScene";
+import Chapter from "@/app/components/story/Chapter";
+import type { EnvironmentId } from "@/app/lib/environments";
 import Reveal from "@/app/components/motion/Reveal";
 
 /** Page-level header band. Shorter than the homepage Hero, same backdrop. */
 export default function PageHero({
+  environment = "forest",
   breadcrumb,
   eyebrow,
   title,
@@ -10,6 +12,8 @@ export default function PageHero({
   aside,
   children,
 }: {
+  /** The world this page header sits in. */
+  environment?: EnvironmentId;
   /** Trail rendered above the eyebrow, for pages nested below a hub. */
   breadcrumb?: React.ReactNode;
   eyebrow?: string;
@@ -22,8 +26,7 @@ export default function PageHero({
   return (
     // No bottom border: the following Section supplies the divider, and two
     // adjacent 1px borders read as a 2px rule.
-    <section className="relative isolate overflow-hidden">
-      <ForestScene variant="band" />
+    <Chapter environment={environment} seamTop={false}>
       <div
         className={`mx-auto max-w-6xl px-6 py-16 sm:py-20 lg:py-24${
           aside
@@ -53,6 +56,6 @@ export default function PageHero({
         </Reveal>
         {aside && <div className="mx-auto w-full max-w-sm lg:mx-0">{aside}</div>}
       </div>
-    </section>
+    </Chapter>
   );
 }

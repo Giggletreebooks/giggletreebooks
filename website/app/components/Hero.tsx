@@ -1,12 +1,11 @@
 import Link from "next/link";
-import ForestScene from "@/app/components/decor/ForestScene";
+import Chapter from "@/app/components/story/Chapter";
 import Logo from "@/app/components/Logo";
 import Reveal from "@/app/components/motion/Reveal";
 
 export default function Hero() {
   return (
-    <section className="relative isolate overflow-hidden">
-      <ForestScene />
+    <Chapter environment="forest" seamTop={false}>
 
       <div className="mx-auto max-w-6xl px-6 py-16 sm:py-24 lg:py-32">
         <div className="grid items-center gap-12 sm:gap-16 lg:grid-cols-[1.05fr_.95fr] lg:gap-20">
@@ -57,6 +56,6 @@ export default function Hero() {
           </div>
         </div>
       </div>
-    </section>
+    </Chapter>
   );
 }

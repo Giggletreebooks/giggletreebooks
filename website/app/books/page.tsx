@@ -21,6 +21,7 @@ export default async function BooksPage() {
   return (
     <>
       <PageHero
+        environment="library"
         eyebrow="The bookshelf"
         title="Every Giggle Tree book, in one place."
         description="Browse by series or scroll the full shelf. Each title is banded by reading age, so you always know what fits."

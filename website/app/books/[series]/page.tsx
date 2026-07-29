@@ -53,6 +53,7 @@ export default async function SeriesPage(props: PageProps<"/books/[series]">) {
   return (
     <>
       <PageHero
+        environment={series.environment}
         eyebrow={available ? "Series" : "Coming soon"}
         title={series.title}
         description={series.description}

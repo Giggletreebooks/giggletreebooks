@@ -4,6 +4,8 @@
  * (which needs book counts) can read it without a circular import.
  */
 
+import type { EnvironmentId } from "@/app/lib/environments";
+
 export type SeriesStatus = "available" | "coming-soon";
 
 export type Learning = {
@@ -23,6 +25,8 @@ export type SeriesSeed = {
    * to the placeholder panel.
    */
   coverDir?: string;
+  /** The world this series lives in. Drives its page environment. */
+  environment?: EnvironmentId;
   /** Longer blurb for the series page. Falls back to `description`. */
   about?: string;
   /** Falls back to `DEFAULT_LEARNINGS` so a new series renders without them. */
@@ -53,6 +57,7 @@ export const DEFAULT_LEARNINGS: Learning[] = [
 export const SERIES_SEED: SeriesSeed[] = [
   {
     slug: "farm-animals",
+    environment: "farm",
     title: "Farm Animals",
     description: "Early mornings, muddy boots, and the friends who live nearby.",
     status: "available",
@@ -84,6 +89,7 @@ export const SERIES_SEED: SeriesSeed[] = [
   },
   {
     slug: "wild-animals",
+    environment: "savanna",
     title: "Wild Animals",
     description: "Big cats, tall grass, and the quiet moments in between.",
     status: "available",
@@ -114,36 +120,42 @@ export const SERIES_SEED: SeriesSeed[] = [
   },
   {
     slug: "sea-animals",
+    environment: "meadow",
     title: "Sea Animals",
     description: "Down past the shallows, where the light turns blue.",
     status: "coming-soon",
   },
   {
     slug: "birds",
+    environment: "forest",
     title: "Birds",
     description: "Nests, migrations, and songs worth waking up for.",
     status: "coming-soon",
   },
   {
     slug: "dinosaurs",
+    environment: "forest",
     title: "Dinosaurs",
     description: "Footprints the size of ponds, from a very long time ago.",
     status: "coming-soon",
   },
   {
     slug: "jungle-animals",
+    environment: "forest",
     title: "Jungle Animals",
     description: "Vines, canopies, and voices calling through the leaves.",
     status: "coming-soon",
   },
   {
     slug: "pets",
+    environment: "meadow",
     title: "Pets",
     description: "The small companions who share the sofa and the routine.",
     status: "coming-soon",
   },
   {
     slug: "insects",
+    environment: "meadow",
     title: "Insects",
     description: "Six legs, busy work, and a whole world underfoot.",
     status: "coming-soon",

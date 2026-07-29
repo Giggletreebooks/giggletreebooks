@@ -28,19 +28,64 @@
   --font-display: var(--font-fraunces);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #14100b;
-    --surface: #1f1811;
-    --foreground: #f7f1e7;
-    --muted: #b3a28e;
-    --border: #33291d;
-    /* Lifted so it clears contrast on a dark ground; same hue as #19680F. */
-    --brand: #7cc46a;
-    --brand-soft: #1c2a18;
-    --accent: #e0be97;
-    --accent-soft: #2a2016;
-  }
+/*
+  No dark variant. A storybook is a printed, paper-white object; a dark theme
+  fought that identity and inverted every piece of illustrated artwork, which
+  is authored for a light ground. The warm off-white above is the only theme.
+*/
+
+/* ==========================================================================
+   ENVIRONMENT PALETTES
+   Each chapter of the journey sets these, and every layer inside it reads
+   them. A new world is a palette plus a layer list — no component changes.
+   ========================================================================== */
+
+[data-environment] {
+  --env-sky: var(--brand-soft);
+  --env-haze: var(--accent-soft);
+  --env-foliage: var(--brand);
+  --env-ground: var(--brand);
+  --env-accent: var(--accent);
+}
+
+[data-environment="forest"] {
+  --env-sky: #e8f1e4;
+  --env-haze: #f4ead8;
+  --env-foliage: #2f6b1f;
+  --env-ground: #3f7a2a;
+  --env-accent: #c98a2e;
+}
+
+[data-environment="farm"] {
+  --env-sky: #eaf2f7;
+  --env-haze: #fbeed6;
+  --env-foliage: #5d8c33;
+  --env-ground: #7aa33f;
+  --env-accent: #d08b2c;
+}
+
+[data-environment="savanna"] {
+  --env-sky: #fbf0dc;
+  --env-haze: #f6e0bb;
+  --env-foliage: #8a7a34;
+  --env-ground: #b09447;
+  --env-accent: #c2702a;
+}
+
+[data-environment="library"] {
+  --env-sky: #f6ecdd;
+  --env-haze: #f0dfc4;
+  --env-foliage: #7a4a24;
+  --env-ground: #6b4020;
+  --env-accent: #b4622a;
+}
+
+[data-environment="meadow"] {
+  --env-sky: #eef3e6;
+  --env-haze: #fbf0d8;
+  --env-foliage: #4f8a35;
+  --env-ground: #6aa143;
+  --env-accent: #d2953a;
 }
 
 body {
@@ -269,6 +314,160 @@ body {
   transform: scale(1.04);
 }
 
+/* ==========================================================================
+   CHAPTERS & PARALLAX
+   A chapter is a full world. Layers inside it move at different rates as it
+   passes through the viewport, which is what reads as depth.
+   ========================================================================== */
+
+[data-chapter] {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: linear-gradient(
+    to bottom,
+    var(--env-sky) 0%,
+    color-mix(in oklab, var(--env-sky) 35%, var(--background)) 45%,
+    var(--background) 100%
+  );
+}
+
+/* Chapters bleed into each other rather than butting up with a hard edge. */
+[data-chapter-seam] {
+  position: absolute;
+  inset-inline: 0;
+  height: 6rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
+[data-chapter-seam="top"] {
+  top: 0;
+  background: linear-gradient(to bottom, var(--background), transparent);
+}
+
+[data-chapter-seam="bottom"] {
+  bottom: 0;
+  background: linear-gradient(to top, var(--background), transparent);
+}
+
+/*
+  Parallax runs on the browser's own scroll timeline — no scroll listener, no
+  JS on the main thread, and it stays in sync with Lenis because Lenis drives
+  real scroll position rather than transforming a wrapper.
+
+  Guarded by @supports: where scroll timelines are unavailable the layers
+  simply sit still and the scene is a flat illustration, which is a perfectly
+  good fallback.
+
+  --depth: 0 = infinitely far (no travel), 1 = closest (most travel).
+*/
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    [data-parallax] {
+      animation: parallax-travel linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+      will-change: transform;
+    }
+  }
+}
+
+@keyframes parallax-travel {
+  from {
+    transform: translate3d(0, calc(var(--depth, 0.5) * 7vh), 0);
+  }
+  to {
+    transform: translate3d(0, calc(var(--depth, 0.5) * -7vh), 0);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   CHARACTERS
+   Whole-body idles only, matching the single-cutout artwork spec. Each is
+   slow and shallow: a character that reads as breathing, not performing.
+   -------------------------------------------------------------------------- */
+
+[data-character] {
+  transform-origin: bottom center;
+  animation-duration: var(--idle-duration, 6s);
+  animation-timing-function: var(--ease-in-out);
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-delay: var(--idle-delay, 0s);
+}
+
+[data-character][data-idle="breathe"] {
+  animation-name: idle-breathe;
+}
+[data-character][data-idle="bob"] {
+  animation-name: idle-bob;
+}
+[data-character][data-idle="sway"] {
+  animation-name: idle-sway;
+}
+[data-character][data-idle="lean"] {
+  animation-name: idle-lean;
+}
+[data-character][data-idle="hop"] {
+  animation-name: idle-hop;
+  animation-timing-function: cubic-bezier(0.3, 0, 0.4, 1);
+  animation-direction: normal;
+}
+
+@keyframes idle-breathe {
+  from {
+    transform: scale(1) translateY(0);
+  }
+  to {
+    transform: scale(1.015) translateY(-0.35%);
+  }
+}
+
+@keyframes idle-bob {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(-1 * var(--idle-amount, 0.6rem)));
+  }
+}
+
+@keyframes idle-sway {
+  from {
+    transform: rotate(calc(-1 * var(--idle-amount, 1.4deg)));
+  }
+  to {
+    transform: rotate(var(--idle-amount, 1.4deg));
+  }
+}
+
+@keyframes idle-lean {
+  from {
+    transform: rotate(0deg) translateY(0);
+  }
+  to {
+    transform: rotate(var(--idle-amount, 2deg)) translateY(-0.2rem);
+  }
+}
+
+@keyframes idle-hop {
+  0%,
+  62%,
+  100% {
+    transform: translateY(0) scaleY(1);
+  }
+  68% {
+    transform: translateY(0) scaleY(0.94);
+  }
+  80% {
+    transform: translateY(calc(-1 * var(--idle-amount, 1.1rem))) scaleY(1.03);
+  }
+  92% {
+    transform: translateY(0) scaleY(0.98);
+  }
+}
+
 /* --------------------------------------------------------------------------
    3D BOOKS
    A real preserve-3d object: front cover plus a spine plane at its left edge.
@@ -406,9 +605,16 @@ body {
     transition: none;
   }
 
-  /* The forest stays — it just stops moving. The art is the atmosphere; the
+  /* The world stays — it just stops moving. The art is the atmosphere; the
      motion is the enhancement. */
-  [data-decor-item][data-decor-motion] {
+  [data-decor-item][data-decor-motion],
+  [data-character] {
+    animation: none;
+    transform: none;
+  }
+
+  /* Parallax layers hold their resting position. */
+  [data-parallax] {
     animation: none;
     transform: none;
   }

@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import BookCoverFrame from "@/app/components/BookCoverFrame";
+import Character from "@/app/components/story/Character";
 import BookGrid from "@/app/components/BookGrid";
 import Breadcrumb from "@/app/components/Breadcrumb";
 import PageHero from "@/app/components/PageHero";
 import PrintableGrid from "@/app/components/PrintableGrid";
 import Section from "@/app/components/Section";
 import { getBook, getBooks, getBooksBySeries } from "@/app/lib/books";
+import { resolveCharacter } from "@/app/lib/characters";
 import { getPrintablesBySeries } from "@/app/lib/printables";
 import { getSeriesBySlug } from "@/app/lib/series";
 
@@ -52,10 +54,13 @@ export default async function BookPage(
   /* Seed order is the reading order from the master book folders. */
   const position = siblings.findIndex((item) => item.slug === book.slug) + 1;
   const others = siblings.filter((item) => item.slug !== book.slug);
+  /* Renders nothing until a cutout exists; the build logs what's missing. */
+  const character = resolveCharacter(seriesSlug, book.title);
 
   return (
     <>
       <PageHero
+        environment={series.environment}
         breadcrumb={
           <Breadcrumb
             trail={[
@@ -68,7 +73,19 @@ export default async function BookPage(
         eyebrow={series.title}
         title={book.title}
         description={book.description}
-        aside={<BookCoverFrame book={book} />}
+        aside={
+          <div className="relative">
+            <BookCoverFrame book={book} />
+            {character && (
+              <Character
+                character={character}
+                priority
+                /* Beside the book, standing on the same ground line. */
+                className="pointer-events-none absolute -right-6 -bottom-4 h-40 w-32 sm:-right-10 sm:h-52 sm:w-40 lg:-right-16 lg:h-64 lg:w-48"
+              />
+            )}
+          </div>
+        }
       >
         <dl className="flex flex-wrap gap-x-8 gap-y-3 text-sm">
           <Detail label="Series">

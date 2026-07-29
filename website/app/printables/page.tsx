@@ -35,6 +35,7 @@ export default async function PrintablesPage() {
   return (
     <>
       <PageHero
+        environment="meadow"
         eyebrow="Free to download"
         title="Printables to go with every book."
         description="Coloring pages, activity sheets, worksheets, and games that pick up where the story leaves off. Free for parents, teachers, and homeschoolers — no account, no sign-up."
