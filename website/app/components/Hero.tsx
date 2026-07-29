@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Chapter from "@/app/components/story/Chapter";
 import { BUTTON_PRIMARY, BUTTON_SECONDARY } from "@/app/lib/buttonStyles";
-import Logo from "@/app/components/Logo";
+import HeroLogoVideo from "@/app/components/HeroLogoVideo";
 import Reveal from "@/app/components/motion/Reveal";
 
 export default function Hero() {
@@ -44,15 +44,16 @@ export default function Hero() {
           </Reveal>
 
           {/* The logo carries the wordmark itself — no text beside it. */}
-          <div className="relative mx-auto w-full max-w-md lg:mx-0">
+          <div className="relative mx-auto w-full max-w-md lg:mx-0 lg:max-w-lg">
             <div className="absolute inset-0 -rotate-3 rounded-[2rem] border border-border bg-brand-soft/60" />
-            {/* bg-white, not bg-surface: the logo's dark ink needs a light ground in both themes. */}
-            <div className="relative flex aspect-square items-center justify-center rounded-[2rem] border border-border bg-white p-8 shadow-[0_24px_60px_-32px_rgb(59_28_0_/_0.4)] sm:p-10">
-              <Logo
-                className="h-full w-full object-contain"
-                sizes="(min-width: 640px) 28rem, 90vw"
-                priority
-              />
+            {/*
+              16:9 to match the animation, and overflow-hidden with no padding
+              so the video fills the card edge to edge inside the rounded
+              corners. bg-white because the artwork's dark ink needs a light
+              ground and the video letterboxes to it while loading.
+            */}
+            <div className="relative aspect-video overflow-hidden rounded-[2rem] border border-border bg-white shadow-[0_24px_60px_-32px_rgb(59_28_0_/_0.4)]">
+              <HeroLogoVideo />
             </div>
           </div>
         </div>

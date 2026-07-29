@@ -34,3 +34,13 @@ export const logo = {
   height: 1799,
   alt: "Giggle Tree Books",
 } as const;
+
+/**
+ * Animated logo for the hero card. 1280×720, so the card holding it is 16:9 —
+ * a 16:9 video inside a square frame is mostly empty space.
+ */
+export const logoAnimation = {
+  src: `${assetDirs.branding}/logo-animation.mp4`,
+  width: 1280,
+  height: 720,
+} as const;
