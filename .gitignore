@@ -5,3 +5,9 @@
 # away for free (and blows past the 1GB GitHub Pages limit). Master copies live
 # in Documents/GT.
 website/public/series/
+
+# Design reference clips. Local inspiration only — other people's work, kept on
+# this machine and never published, committed or pushed. Ignored rather than
+# just left untracked because the folder sits inside the repo, and one
+# `git add -A` would otherwise sweep it in.
+reference-video/
