@@ -26,10 +26,13 @@ export default function Hero() {
       {/* max-w-6xl, like the masthead and every chapter below. At 7xl the
           headline sat 64px left of everything else on the page, including the
           logo directly above it. */}
-      <div className="mx-auto max-w-6xl px-6 py-16 sm:py-24 lg:py-32">
+      {/* Tall enough to be somewhere rather than something to scroll past.
+          The scene needs room above and below the content for the sky and the
+          ground to read as distance. */}
+      <div className="mx-auto flex min-h-[86vh] max-w-6xl items-center px-6 py-16 sm:py-24 lg:py-28">
         {/* The media column carries more weight than the text so the logo can
             grow without the headline losing its measure. */}
-        <div className="grid items-center gap-12 sm:gap-16 lg:grid-cols-[0.9fr_1.2fr] lg:gap-16 xl:gap-20">
+        <div className="grid w-full items-center gap-12 sm:gap-16 lg:grid-cols-[0.9fr_1.2fr] lg:gap-16 xl:gap-20">
           {/* Only the text column reveals — the logo card is the LCP element
               and fading it in would delay Largest Contentful Paint. */}
           <Reveal>
@@ -67,74 +70,37 @@ export default function Hero() {
           </Reveal>
 
           {/*
-            The logo stage. 5:4 crops the animation's wide framing so the
-            lockup fills the frame, and the wider column lets it run to
-            max-w-2xl — together about 40% larger than before.
+            The logo, standing in the scene.
 
-            No mat, no plates, no border. A frame around an illustration makes
-            the page read as a gallery of assets; the animation should sit in
-            the world with the trees. All that is left is light behind it and
-            a shadow under it, so it reads as resting in the scene rather than
-            mounted on it.
+            No card, no frame, no plate, no shadow under it. The animation is
+            drawn on white paper; HeroLogoVideo dissolves that paper with a
+            multiply blend and a feathered edge, so what lands on the page is
+            the artwork alone with nothing round it. A frame was the last thing
+            making this read as a video placed on a background rather than
+            something growing in the world beside the trees.
+
+            16:9 rather than the old 5:4 crop: with the paper invisible there
+            is no reason to crop the lockup to fill a frame that no longer
+            exists, so the whole illustration shows.
           */}
           <div
             data-hero-stage=""
-            className="relative mx-auto w-full max-w-md sm:max-w-xl lg:mx-0 lg:max-w-2xl"
+            className="relative mx-auto w-full max-w-lg sm:max-w-2xl lg:mx-0 lg:max-w-none"
           >
-            {/* Soft light behind the glass, bleeding past its edges. */}
+            {/* Warm light gathering behind it, as though the clearing opens
+                here. The only thing left that is not the artwork. */}
             <div
               aria-hidden
-              className="pointer-events-none absolute -inset-12 -z-10 rounded-[50%] blur-3xl"
+              className="pointer-events-none absolute -inset-16 -z-10 rounded-[50%] blur-3xl"
               style={{
                 background:
-                  "radial-gradient(closest-side, var(--env-haze), transparent 76%)",
-                opacity: 0.95,
+                  "radial-gradient(closest-side, var(--env-haze), transparent 74%)",
+                opacity: 0.9,
               }}
             />
 
-            {/*
-              Contact shadow on the ground. Without it the card hangs in the
-              air: the ambient shadow says "raised", only a shadow that meets
-              the ground says "resting on something".
-            */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-x-10 -bottom-6 -z-10 h-10 rounded-[50%] blur-2xl"
-              style={{ background: "rgb(59 28 0 / 0.22)" }}
-            />
-
-            {/* The hairline is warm brown, not grey: black at any opacity
-                reads cold against paper and puts a screen edge round the
-                artwork. */}
-            <div className="relative aspect-5/4 overflow-hidden rounded-[2.5rem] outline outline-[rgb(59_28_0_/_0.07)] -outline-offset-1 shadow-[0_28px_56px_-24px_rgb(59_28_0_/_0.34),0_2px_6px_-1px_rgb(59_28_0_/_0.10)]">
+            <div className="relative aspect-video">
               <HeroLogoVideo />
-              {/*
-                The artwork is drawn on white; the page is warm paper. Feather
-                the inside of the edge into the chapter's own haze so the two
-                whites meet in a glow rather than on a line. This is most of
-                what stops it reading as a screen set into a painting.
-              */}
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 rounded-[2.5rem]"
-                style={{ boxShadow: "inset 0 0 44px 14px var(--env-haze)" }}
-              />
-              {/*
-                The same sun, on the artwork. The chapter's light pass sits
-                under the content, so it lit every tree in the scene and left
-                this one object unlit — the one thing that gave it away as
-                something laid on top rather than standing in the world. Same
-                direction, same warmth, gentler: this is brand artwork, so it
-                gets lit, not recoloured.
-              */}
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 rounded-[2.5rem] mix-blend-soft-light"
-                style={{
-                  background:
-                    "radial-gradient(82% 72% at 4% 0%, rgb(255 226 168 / 0.6), transparent 62%), linear-gradient(112deg, transparent 46%, rgb(46 78 84 / 0.26) 100%)",
-                }}
-              />
             </div>
           </div>
         </div>

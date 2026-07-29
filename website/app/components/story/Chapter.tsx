@@ -67,7 +67,17 @@ export default function Chapter({
           this one drops to a whisper when there is one. */}
       <div data-chapter-light={plate ? "plate" : ""} aria-hidden />
       {seamTop && <div data-chapter-seam="top" aria-hidden />}
-      <div className="relative z-[2]">{children}</div>
+      {/*
+        `z-[2]` lifts the content above the seams, which sit at 1. A chapter
+        with no seams does not need it — and must not have it, because a
+        z-index here creates a stacking context that isolates `mix-blend-mode`
+        inside the content from the scene behind it. That isolation is what
+        stops the Hero's logo from blending into its own world, so the Hero
+        (which has no seams) gets an unisolated wrapper.
+      */}
+      <div className={seamTop || seamBottom ? "relative z-[2]" : "relative"}>
+        {children}
+      </div>
       {seamBottom && <div data-chapter-seam="bottom" aria-hidden />}
     </section>
   );

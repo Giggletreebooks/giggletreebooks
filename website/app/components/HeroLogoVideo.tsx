@@ -15,6 +15,15 @@ import { logoAnimation } from "@/app/lib/assets";
  * entirely would cost those visitors the brand, and playing it would ignore a
  * preference they have set deliberately.
  */
+/** Feathers all four edges so the artwork has no boundary, only a falloff. */
+const FEATHER = [
+  "linear-gradient(to right, transparent 0, #000 15%, #000 85%, transparent 100%)",
+  /* The bottom fades earliest and longest: the artwork has its own ground
+     shadow down there, which is the one part dark enough to survive multiply
+     and draw a visible edge. */
+  "linear-gradient(to bottom, transparent 0, #000 9%, #000 74%, transparent 100%)",
+].join(", ");
+
 export default function HeroLogoVideo() {
   const ref = useRef<HTMLVideoElement>(null);
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -63,8 +72,28 @@ export default function HeroLogoVideo() {
       role="img"
       tabIndex={-1}
       /* No fade-in: the poster is rendered by this element, so fading from
-         zero would hide it and leave the card blank while the video loads. */
+         zero would hide it and leave the frame blank while the video loads. */
       className="h-full w-full object-cover"
+      /*
+        The animation is drawn on white paper. Rather than hide that behind a
+        card, two things dissolve it into the scene:
+
+        `multiply` drops white to nothing — white multiplied by any backdrop is
+        that backdrop — so the paper vanishes and only the artwork remains. It
+        needs no isolating ancestor between here and the chapter, which is why
+        Chapter drops its z-index when a chapter has no seams.
+
+        The mask then feathers all four edges, because the paper is a warm
+        off-white rather than pure white and multiply alone still leaves a
+        faint rectangle. A small levels lift finishes clipping it.
+      */
+      style={{
+        mixBlendMode: "multiply",
+        filter: "brightness(1.075) contrast(1.02) saturate(1.05)",
+        maskImage: FEATHER,
+        WebkitMaskImage: FEATHER,
+        maskComposite: "intersect",
+      }}
     >
       <source src={logoAnimation.src} type="video/mp4" />
     </video>
