@@ -36,8 +36,10 @@ export const logo = {
 } as const;
 
 /**
- * Animated logo for the hero card. 1280×720, so the card holding it is 16:9 —
- * a 16:9 video inside a square frame is mostly empty space.
+ * Animated logo for the hero card. 1280×720 native, but the card is 4:3 and
+ * crops it: the logo lockup fills only ~51% of the frame width, so the wider
+ * framing wasted a third of the card on empty background. Full resolution is
+ * kept precisely because the card crops in — downscaling first would show.
  */
 export const logoAnimation = {
   src: `${assetDirs.branding}/logo-animation.mp4`,

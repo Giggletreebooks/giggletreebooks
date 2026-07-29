@@ -48,8 +48,8 @@ export default function HeroLogoVideo() {
   return (
     <div className="relative h-full w-full">
       <Logo
-        className="absolute inset-0 h-full w-full object-contain p-6 sm:p-8"
-        sizes="(min-width: 1024px) 28rem, 90vw"
+        className="absolute inset-0 h-full w-full object-contain p-4 sm:p-5"
+        sizes="(min-width: 1024px) 32rem, 90vw"
         priority
       />
 

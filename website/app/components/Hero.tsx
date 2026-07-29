@@ -47,12 +47,15 @@ export default function Hero() {
           <div className="relative mx-auto w-full max-w-md lg:mx-0 lg:max-w-lg">
             <div className="absolute inset-0 -rotate-3 rounded-[2rem] border border-border bg-brand-soft/60" />
             {/*
-              16:9 to match the animation, and overflow-hidden with no padding
-              so the video fills the card edge to edge inside the rounded
-              corners. bg-white because the artwork's dark ink needs a light
-              ground and the video letterboxes to it while loading.
+              4:3, not the animation's native 16:9. The logo lockup occupies
+              only ~51% of the frame width, so a 16:9 card showed wide dead
+              margins either side of it. A 4:3 card with object-cover crops
+              those margins instead, enlarging the logo about a third without
+              widening the card or unbalancing the hero.
+
+              bg-white because the artwork's dark ink needs a light ground.
             */}
-            <div className="relative aspect-video overflow-hidden rounded-[2rem] border border-border bg-white shadow-[0_24px_60px_-32px_rgb(59_28_0_/_0.4)]">
+            <div className="relative aspect-4/3 overflow-hidden rounded-[2rem] border border-border bg-white shadow-[0_32px_70px_-30px_rgb(59_28_0_/_0.45)]">
               <HeroLogoVideo />
             </div>
           </div>
