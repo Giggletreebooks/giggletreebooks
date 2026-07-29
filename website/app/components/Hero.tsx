@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Chapter from "@/app/components/story/Chapter";
+import { BUTTON_PRIMARY, BUTTON_SECONDARY } from "@/app/lib/buttonStyles";
 import Logo from "@/app/components/Logo";
 import Reveal from "@/app/components/motion/Reveal";
 
@@ -29,13 +30,13 @@ export default function Hero() {
             <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
               <Link
                 href="/books"
-                className="inline-flex h-12 cursor-pointer items-center justify-center rounded-full bg-brand px-7 text-sm font-semibold text-background shadow-sm transition-all duration-200 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                className={BUTTON_PRIMARY}
               >
                 Explore Books
               </Link>
               <Link
                 href="/printables"
-                className="inline-flex h-12 cursor-pointer items-center justify-center rounded-full border border-border bg-surface px-7 text-sm font-semibold transition-all duration-200 hover:border-brand hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                className={BUTTON_SECONDARY}
               >
                 Free Printables
               </Link>
