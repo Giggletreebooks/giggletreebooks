@@ -286,7 +286,9 @@ function renderLayer(layer: LayerSpec) {
           className="top-0 h-4 w-4 sm:h-5 sm:w-5"
           style={{ left: spread(count, i), color: "var(--env-foliage)" }}
         >
-          <Leaf className="h-full w-full" />
+          <Scenery name="leaf" sizes="1.25rem">
+            <Leaf className="h-full w-full" />
+          </Scenery>
         </DecorItem>
       ));
 
@@ -389,7 +391,9 @@ function renderLayer(layer: LayerSpec) {
             opacity: 0.5,
           }}
         >
-          <Butterfly className="h-full w-full" />
+          <Scenery name="butterfly" sizes="1.5rem">
+            <Butterfly className="h-full w-full" />
+          </Scenery>
         </DecorItem>
       ));
 

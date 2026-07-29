@@ -103,10 +103,17 @@ Every piece wrapped in `<Scenery>` checks for a painting first:
 public/scenery/<name>.webp     (.png also works)
 ```
 
-Eleven are painted today: `tree-oak`, `tree-distant`, `bush`, `hills`,
-`rocks`, `path`, `grass`, `flowers`, `barn`, `cloud`, `fence`. Anything with
-no painting draws its vector version instead, so the set can be filled in one
-piece at a time and a missing file never breaks a page.
+Thirteen are painted today: `tree-oak`, `tree-distant`, `bush`, `hills`,
+`rocks`, `path`, `grass`, `flowers`, `barn`, `cloud`, `fence`, `leaf`,
+`butterfly`. Anything with no painting draws its vector version instead, so
+the set can be filled in one piece at a time and a missing file never breaks
+a page.
+
+Still vector: `bird`, and the waterfall. A bird only needs the painting.
+**The waterfall needs more than a `<Scenery>` slot** — its stream is two
+stacked copies translated a full copy's height to loop, so dropping a still
+painting in its place would stop the water. It wants a vertically tileable
+water texture inside that same mechanism.
 
 **Paintings are not tinted.** They arrive with their own light, which is the
 point of them; vector art keeps inheriting `--env-*` through `currentColor`.
