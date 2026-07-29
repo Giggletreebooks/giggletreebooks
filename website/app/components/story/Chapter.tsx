@@ -20,6 +20,7 @@ export default function Chapter({
   from,
   seamTop = true,
   seamBottom = true,
+  plate,
   className,
   children,
 }: {
@@ -27,6 +28,8 @@ export default function Chapter({
   from?: EnvironmentId;
   seamTop?: boolean;
   seamBottom?: boolean;
+  /** A master painted illustration to use instead of this world's layers. */
+  plate?: string;
   className?: string;
   children: React.ReactNode;
 }) {
@@ -51,7 +54,7 @@ export default function Chapter({
         } as CSSProperties
       }
     >
-      <EnvironmentScene environment={env} />
+      <EnvironmentScene environment={env} plate={plate} />
       {/*
         One light over the whole scene, above every piece of art and below the
         copy. Thirteen cut-outs each carrying its own lighting is a collage;
@@ -60,7 +63,9 @@ export default function Chapter({
         tuning, because it is the thing real illustration has that assembled
         art never does.
       */}
-      <div data-chapter-light="" aria-hidden />
+      {/* A plate carries its own light; two light passes fight each other, so
+          this one drops to a whisper when there is one. */}
+      <div data-chapter-light={plate ? "plate" : ""} aria-hidden />
       {seamTop && <div data-chapter-seam="top" aria-hidden />}
       <div className="relative z-[2]">{children}</div>
       {seamBottom && <div data-chapter-seam="bottom" aria-hidden />}

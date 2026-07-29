@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Barn from "@/app/components/decor/art/Barn";
 import Bird from "@/app/components/decor/art/Bird";
 import Bush from "@/app/components/decor/art/Bush";
@@ -32,14 +33,54 @@ import type { Environment, LayerSpec } from "@/app/lib/environments";
  * so a given environment renders identically on server and client and the
  * static export stays stable between builds.
  */
+/**
+ * What a master plate cannot contain, because these move. Everything else in
+ * the layer stack is painted into the plate. See docs/hero-art-brief.md §13.
+ */
+const KEEPS_MOVING = new Set(["motes", "leaves", "butterflies", "birds"]);
+
 export default function EnvironmentScene({
   environment,
+  plate,
 }: {
   environment: Environment;
+  /**
+   * A single painted illustration standing in for the whole layer stack.
+   * When present, only the things that move are still drawn on top of it.
+   */
+  plate?: string;
 }) {
+  const backLayers = environment.layers.filter(
+    (layer) => !layer.front && (!plate || KEEPS_MOVING.has(layer.art)),
+  );
+
   return (
     <>
       <DecorLayer>
+        {plate && (
+          /* Travels slowly, as the furthest thing that still moves at all. */
+          <ParallaxLayer depth={0.2}>
+            <DecorItem className="inset-0">
+              <Image
+                src={plate}
+                alt=""
+                fill
+                priority
+                sizes="100vw"
+                className="object-cover object-bottom"
+                /* The top dissolves so the sky meets the masthead's paper
+                   without a line, the same seam the chapters use. */
+                style={{
+                  maskImage:
+                    "linear-gradient(to bottom, transparent 0, #000 9%)",
+                  WebkitMaskImage:
+                    "linear-gradient(to bottom, transparent 0, #000 9%)",
+                }}
+              />
+            </DecorItem>
+          </ParallaxLayer>
+        )}
+
         {/* Atmospheric haze pooling at the edges, behind everything. */}
         <ParallaxLayer depth={0.05}>
           <DecorItem
@@ -59,17 +100,15 @@ export default function EnvironmentScene({
           />
         </ParallaxLayer>
 
-        {environment.layers
-          .filter((layer) => !layer.front)
-          .map((layer, index) => (
-            <ParallaxLayer
-              key={`${layer.art}-${index}`}
-              depth={layer.depth}
-              className={VISIBILITY[layer.minWidth ?? "all"]}
-            >
-              {renderLayer(layer)}
-            </ParallaxLayer>
-          ))}
+        {backLayers.map((layer, index) => (
+          <ParallaxLayer
+            key={`${layer.art}-${index}`}
+            depth={layer.depth}
+            className={VISIBILITY[layer.minWidth ?? "all"]}
+          >
+            {renderLayer(layer)}
+          </ParallaxLayer>
+        ))}
       </DecorLayer>
 
       {/* The near field, over the content. */}

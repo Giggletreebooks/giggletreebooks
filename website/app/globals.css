@@ -398,6 +398,10 @@ body {
   lights and shades the scene. The chapter is `isolation: isolate`, so the
   blend is contained to its own world and never touches the page.
 */
+[data-chapter-light="plate"] {
+  opacity: 0.3;
+}
+
 [data-chapter-light] {
   position: absolute;
   inset: 0;

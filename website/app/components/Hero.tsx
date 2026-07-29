@@ -3,10 +3,25 @@ import Chapter from "@/app/components/story/Chapter";
 import { BUTTON_PRIMARY, BUTTON_SECONDARY } from "@/app/lib/buttonStyles";
 import HeroLogoVideo from "@/app/components/HeroLogoVideo";
 import Reveal from "@/app/components/motion/Reveal";
+import { resolveHeroPlate } from "@/app/lib/heroPlate";
 
 export default function Hero() {
+  /*
+    Resolved from disk, not from a flag. Drop public/hero/plate.webp in and the
+    Hero becomes one painted illustration with only the moving pieces layered
+    over it; take it away and it rebuilds itself from the scenery layers. No
+    component changes either way, and a missing file ships the previous design
+    rather than a hole. See docs/hero-art-brief.md.
+  */
+  const plate = resolveHeroPlate();
+
   return (
-    <Chapter environment="forest" seamTop={false} seamBottom={false}>
+    <Chapter
+      environment="forest"
+      seamTop={false}
+      seamBottom={false}
+      plate={plate}
+    >
 
       {/* max-w-6xl, like the masthead and every chapter below. At 7xl the
           headline sat 64px left of everything else on the page, including the
