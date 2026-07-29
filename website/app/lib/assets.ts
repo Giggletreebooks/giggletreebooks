@@ -17,6 +17,7 @@ export const assetDirs = {
   branding: `${BASE}/branding`,
   covers: `${BASE}/covers`,
   characters: `${BASE}/characters`,
+  scenery: `${BASE}/scenery`,
   printables: `${BASE}/printables`,
 } as const;
 

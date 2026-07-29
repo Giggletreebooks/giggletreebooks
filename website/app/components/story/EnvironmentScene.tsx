@@ -17,6 +17,7 @@ import TreeStorybook from "@/app/components/decor/art/TreeStorybook";
 import Waterfall from "@/app/components/decor/art/Waterfall";
 import DecorItem from "@/app/components/decor/DecorItem";
 import DecorLayer from "@/app/components/decor/DecorLayer";
+import Scenery from "@/app/components/decor/Scenery";
 import ParallaxLayer from "@/app/components/story/ParallaxLayer";
 import type { Environment, LayerSpec } from "@/app/lib/environments";
 
@@ -106,7 +107,9 @@ function renderLayer(layer: LayerSpec) {
             opacity: 0.75 - i * 0.12,
           }}
         >
-          <Cloud className="h-full w-full" />
+          <Scenery name="cloud" sizes="12rem">
+            <Cloud className="h-full w-full" />
+          </Scenery>
         </DecorItem>
       ));
 
@@ -129,7 +132,9 @@ function renderLayer(layer: LayerSpec) {
           className="inset-x-0 bottom-0 h-40 sm:h-56 lg:h-64"
           style={{ color: "var(--env-ground)", opacity: 0.2 }}
         >
-          <HillsSoft className="h-full w-full" />
+          <Scenery name="hills" sizes="100vw">
+            <HillsSoft className="h-full w-full" />
+          </Scenery>
         </DecorItem>
       );
 
@@ -152,7 +157,9 @@ function renderLayer(layer: LayerSpec) {
           className="inset-x-0 bottom-0 h-32 sm:h-44"
           style={{ color: "var(--env-haze)", opacity: 0.5 }}
         >
-          <Path className="h-full w-full" />
+          <Scenery name="path" sizes="100vw">
+            <Path className="h-full w-full" />
+          </Scenery>
         </DecorItem>
       );
 
@@ -172,7 +179,9 @@ function renderLayer(layer: LayerSpec) {
             opacity: 0.34,
           }}
         >
-          <TreeStorybook className="h-full w-full" />
+          <Scenery name="tree-oak" sizes="(min-width: 1280px) 20rem, 16rem">
+            <TreeStorybook className="h-full w-full" />
+          </Scenery>
         </DecorItem>
       ));
 
@@ -187,7 +196,9 @@ function renderLayer(layer: LayerSpec) {
             opacity: 0.24,
           }}
         >
-          <Bush className="h-full w-full" />
+          <Scenery name="bush" sizes="9rem">
+            <Bush className="h-full w-full" />
+          </Scenery>
         </DecorItem>
       ));
 
@@ -216,7 +227,9 @@ function renderLayer(layer: LayerSpec) {
             opacity: 0.16,
           }}
         >
-          <Tree className="h-full w-full" />
+          <Scenery name="tree-distant" sizes="5rem">
+            <Tree className="h-full w-full" />
+          </Scenery>
         </DecorItem>
       ));
 
@@ -236,7 +249,9 @@ function renderLayer(layer: LayerSpec) {
             opacity: 0.22,
           }}
         >
-          <Tree className="h-full w-full" />
+          <Scenery name="tree-distant" sizes="5rem">
+            <Tree className="h-full w-full" />
+          </Scenery>
         </DecorItem>
       ));
 
@@ -275,7 +290,9 @@ function renderLayer(layer: LayerSpec) {
                 opacity: 0.26,
               }}
             >
+              <Scenery name="grass" sizes="100vw">
               <Grass className="h-full w-full" />
+            </Scenery>
             </DecorItem>
           ))
         : (
@@ -283,7 +300,9 @@ function renderLayer(layer: LayerSpec) {
               className="inset-x-0 bottom-0 h-10 sm:h-14"
               style={{ color: "var(--env-ground)", opacity: 0.18 }}
             >
+              <Scenery name="grass" sizes="100vw">
               <Grass className="h-full w-full" />
+            </Scenery>
             </DecorItem>
           );
 
@@ -293,7 +312,9 @@ function renderLayer(layer: LayerSpec) {
           className="right-[6%] bottom-[10%] h-32 w-44 lg:h-40 lg:w-56"
           style={{ color: "var(--env-accent)", opacity: 0.17 }}
         >
-          <Barn className="h-full w-full" />
+          <Scenery name="barn" sizes="14rem">
+            <Barn className="h-full w-full" />
+          </Scenery>
         </DecorItem>
       );
 
@@ -318,7 +339,9 @@ function renderLayer(layer: LayerSpec) {
             opacity: 0.22,
           }}
         >
-          <Rocks className="h-full w-full" />
+          <Scenery name="rocks" sizes="7rem">
+            <Rocks className="h-full w-full" />
+          </Scenery>
         </DecorItem>
       ));
 
@@ -384,11 +407,13 @@ function renderLayer(layer: LayerSpec) {
             opacity: 0.32,
           }}
         >
-          <Flower
-            className="h-full w-full"
-            petal="var(--env-haze)"
-            centre="var(--env-accent)"
-          />
+          <Scenery name="flowers" sizes="3rem">
+            <Flower
+              className="h-full w-full"
+              petal="var(--env-haze)"
+              centre="var(--env-accent)"
+            />
+          </Scenery>
         </DecorItem>
       ));
   }
