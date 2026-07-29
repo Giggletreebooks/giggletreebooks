@@ -1,7 +1,15 @@
 import type { CSSProperties } from "react";
 
 /** Ambient motions available to decorative art. Behaviour lives in globals.css. */
-export type DecorMotion = "float" | "sway" | "drift" | "fall";
+export type DecorMotion =
+  | "float"
+  | "sway"
+  | "drift"
+  | "fall"
+  /** Wandering loop — butterflies. */
+  | "flutter"
+  /** Long crossing that rises and settles — birds. */
+  | "glide";
 
 /**
  * A single decorative piece inside a `DecorLayer`.

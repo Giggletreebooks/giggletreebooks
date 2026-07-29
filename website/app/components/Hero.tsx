@@ -6,7 +6,7 @@ import Reveal from "@/app/components/motion/Reveal";
 
 export default function Hero() {
   return (
-    <Chapter environment="forest" seamTop={false}>
+    <Chapter environment="forest" seamTop={false} seamBottom={false}>
 
       <div className="mx-auto max-w-6xl px-6 py-16 sm:py-24 lg:py-32">
         <div className="grid items-center gap-12 sm:gap-16 lg:grid-cols-[1.05fr_.95fr] lg:gap-20">

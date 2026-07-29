@@ -36,57 +36,10 @@
 
 /* ==========================================================================
    ENVIRONMENT PALETTES
-   Each chapter of the journey sets these, and every layer inside it reads
-   them. A new world is a palette plus a layer list — no component changes.
+   Set inline by `Chapter` from the environment registry, because chapters
+   blend into one another and need the previous world's sky to fade from —
+   which means the values must be readable from JavaScript, not only CSS.
    ========================================================================== */
-
-[data-environment] {
-  --env-sky: var(--brand-soft);
-  --env-haze: var(--accent-soft);
-  --env-foliage: var(--brand);
-  --env-ground: var(--brand);
-  --env-accent: var(--accent);
-}
-
-[data-environment="forest"] {
-  --env-sky: #e8f1e4;
-  --env-haze: #f4ead8;
-  --env-foliage: #2f6b1f;
-  --env-ground: #3f7a2a;
-  --env-accent: #c98a2e;
-}
-
-[data-environment="farm"] {
-  --env-sky: #eaf2f7;
-  --env-haze: #fbeed6;
-  --env-foliage: #5d8c33;
-  --env-ground: #7aa33f;
-  --env-accent: #d08b2c;
-}
-
-[data-environment="savanna"] {
-  --env-sky: #fbf0dc;
-  --env-haze: #f6e0bb;
-  --env-foliage: #8a7a34;
-  --env-ground: #b09447;
-  --env-accent: #c2702a;
-}
-
-[data-environment="library"] {
-  --env-sky: #f6ecdd;
-  --env-haze: #f0dfc4;
-  --env-foliage: #7a4a24;
-  --env-ground: #6b4020;
-  --env-accent: #b4622a;
-}
-
-[data-environment="meadow"] {
-  --env-sky: #eef3e6;
-  --env-haze: #fbf0d8;
-  --env-foliage: #4f8a35;
-  --env-ground: #6aa143;
-  --env-accent: #d2953a;
-}
 
 body {
   background: var(--background);
@@ -220,6 +173,20 @@ body {
   animation-timing-function: linear;
 }
 
+/* Butterflies: a wandering loop, never a straight line. */
+[data-decor-item][data-decor-motion="flutter"] {
+  animation-name: decor-flutter;
+  animation-duration: var(--decor-duration, 18s);
+  animation-timing-function: var(--ease-in-out);
+}
+
+/* Birds: a long crossing that rises and settles once. */
+[data-decor-item][data-decor-motion="glide"] {
+  animation-name: decor-glide;
+  animation-duration: var(--decor-duration, 70s);
+  animation-timing-function: linear;
+}
+
 /* Leaves: a long diagonal fall with a slow tumble. */
 [data-decor-item][data-decor-motion="fall"] {
   animation-name: decor-fall;
@@ -251,6 +218,34 @@ body {
   }
   to {
     transform: translate3d(var(--decor-to, 125%), 0, 0);
+  }
+}
+
+@keyframes decor-flutter {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-6deg);
+  }
+  25% {
+    transform: translate3d(2.5rem, -1.5rem, 0) rotate(5deg);
+  }
+  50% {
+    transform: translate3d(5rem, 0.5rem, 0) rotate(-4deg);
+  }
+  75% {
+    transform: translate3d(2rem, -2rem, 0) rotate(6deg);
+  }
+}
+
+@keyframes decor-glide {
+  from {
+    transform: translate3d(var(--decor-from, -20%), 0, 0);
+  }
+  50% {
+    transform: translate3d(50%, -2rem, 0);
+  }
+  to {
+    transform: translate3d(var(--decor-to, 120%), 0, 0);
   }
 }
 
@@ -343,7 +338,13 @@ body {
 
 [data-chapter-seam="top"] {
   top: 0;
-  background: linear-gradient(to bottom, var(--background), transparent);
+  /* Fades from the previous world's sky, so chapters cross-dissolve into each
+     other rather than both washing out to page background between them. */
+  background: linear-gradient(
+    to bottom,
+    var(--from-sky, var(--background)),
+    transparent
+  );
 }
 
 [data-chapter-seam="bottom"] {

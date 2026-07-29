@@ -1,3 +1,5 @@
+import Bird from "@/app/components/decor/art/Bird";
+import Butterfly from "@/app/components/decor/art/Butterfly";
 import Cloud from "@/app/components/decor/art/Cloud";
 import Flower from "@/app/components/decor/art/Flower";
 import Grass from "@/app/components/decor/art/Grass";
@@ -194,6 +196,43 @@ function renderLayer(layer: LayerSpec) {
               <Grass className="h-full w-full" />
             </DecorItem>
           );
+
+    case "butterflies":
+      return items.map((i) => (
+        <DecorItem
+          key={i}
+          motion={layer.motion}
+          duration={16 + i * 5}
+          delay={-i * 6}
+          className="h-4 w-5 sm:h-5 sm:w-6"
+          style={{
+            left: `${12 + i * 26}%`,
+            top: `${46 + i * 9}%`,
+            color: "var(--env-accent)",
+            opacity: 0.5,
+          }}
+        >
+          <Butterfly className="h-full w-full" />
+        </DecorItem>
+      ));
+
+    case "birds":
+      return items.map((i) => (
+        <DecorItem
+          key={i}
+          motion={layer.motion}
+          duration={65 + i * 22}
+          delay={-i * 25}
+          className="left-0 h-3 w-8 sm:h-4 sm:w-11"
+          style={{
+            top: `${9 + i * 7}%`,
+            color: "var(--env-foliage)",
+            opacity: 0.32 - i * 0.06,
+          }}
+        >
+          <Bird className="h-full w-full" />
+        </DecorItem>
+      ));
 
     case "flowers":
       return items.map((i) => (

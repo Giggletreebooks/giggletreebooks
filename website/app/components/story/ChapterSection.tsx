@@ -18,18 +18,24 @@ const NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
  */
 export default function ChapterSection({
   environment,
+  from,
   index,
   title,
   description,
+  action,
   seamTop = true,
   seamBottom = true,
   children,
 }: {
   environment: EnvironmentId;
+  /** The world above this one, so the seam cross-dissolves out of it. */
+  from?: EnvironmentId;
   /** Position in the journey, rendered as a numeral. */
   index: number;
   title: string;
   description?: string;
+  /** Closing call to action, spaced consistently across chapters. */
+  action?: React.ReactNode;
   seamTop?: boolean;
   seamBottom?: boolean;
   children: React.ReactNode;
@@ -39,6 +45,7 @@ export default function ChapterSection({
   return (
     <Chapter
       environment={environment}
+      from={from}
       seamTop={seamTop}
       seamBottom={seamBottom}
     >
@@ -62,6 +69,9 @@ export default function ChapterSection({
         </p>
 
         <div className="mt-12 lg:mt-16">{children}</div>
+        {action && (
+          <div className="mt-14 flex justify-center lg:mt-16">{action}</div>
+        )}
       </Reveal>
     </Chapter>
   );
