@@ -100,7 +100,9 @@ function renderLayer(layer: LayerSpec) {
           motion={layer.motion}
           duration={150 + i * 30}
           delay={-40 * (i + 1)}
-          className="left-0 w-32 sm:w-48"
+          /* Explicit height: a painted cloud fills its box, and a box with
+             only a width would be zero tall. */
+          className="left-0 h-[4.5rem] w-32 sm:h-[6.75rem] sm:w-48"
           style={{
             top: `${5 + i * 9}%`,
             color: "var(--surface)",
@@ -132,7 +134,7 @@ function renderLayer(layer: LayerSpec) {
           className="inset-x-0 bottom-0 h-40 sm:h-56 lg:h-64"
           style={{ color: "var(--env-ground)", opacity: 0.2 }}
         >
-          <Scenery name="hills" sizes="100vw">
+          <Scenery name="hills" sizes="100vw" fit="stretch">
             <HillsSoft className="h-full w-full" />
           </Scenery>
         </DecorItem>
@@ -157,7 +159,7 @@ function renderLayer(layer: LayerSpec) {
           className="inset-x-0 bottom-0 h-32 sm:h-44"
           style={{ color: "var(--env-haze)", opacity: 0.5 }}
         >
-          <Scenery name="path" sizes="100vw">
+          <Scenery name="path" sizes="100vw" fit="stretch">
             <Path className="h-full w-full" />
           </Scenery>
         </DecorItem>
@@ -290,9 +292,9 @@ function renderLayer(layer: LayerSpec) {
                 opacity: 0.26,
               }}
             >
-              <Scenery name="grass" sizes="100vw">
-              <Grass className="h-full w-full" />
-            </Scenery>
+              <Scenery name="grass" sizes="8rem">
+                <Grass className="h-full w-full" />
+              </Scenery>
             </DecorItem>
           ))
         : (
@@ -300,9 +302,9 @@ function renderLayer(layer: LayerSpec) {
               className="inset-x-0 bottom-0 h-10 sm:h-14"
               style={{ color: "var(--env-ground)", opacity: 0.18 }}
             >
-              <Scenery name="grass" sizes="100vw">
-              <Grass className="h-full w-full" />
-            </Scenery>
+              <Scenery name="grass" sizes="100vw" fit="stretch">
+                <Grass className="h-full w-full" />
+              </Scenery>
             </DecorItem>
           );
 

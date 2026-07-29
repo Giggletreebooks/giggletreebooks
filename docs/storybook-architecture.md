@@ -95,6 +95,35 @@ expensive to composite; opacity is free.
 
 A butterfly is one file plus one case.
 
+### Painted scenery
+
+Every piece wrapped in `<Scenery>` checks for a painting first:
+
+```
+public/scenery/<name>.webp     (.png also works)
+```
+
+Ten are painted today: `tree-oak`, `tree-distant`, `bush`, `hills`, `rocks`,
+`path`, `grass`, `flowers`, `barn`, `cloud`. Anything with no painting draws
+its vector version instead, so the set can be filled in one piece at a time
+and a missing file never breaks a page.
+
+**Paintings are not tinted.** They arrive with their own light, which is the
+point of them; vector art keeps inheriting `--env-*` through `currentColor`.
+
+**Asset spec**
+- Transparent, no baked-in background — layers sit over each other
+- ~800px on the long side, object standing on the bottom edge
+- WebP: `cwebp -q 82 -alpha_q 90 piece.png -o piece.webp`. These are soft
+  alpha-heavy paintings, so WebP lands ~10× under PNG (2.5 MB → 240 KB for
+  the set) with nothing visible lost. The site serves what is committed.
+
+Full-width bands — `hills`, `path`, and the ground `grass` — pass
+`fit="stretch"` to `<Scenery>`, because their boxes are far wider than any
+painting. That matches the vector versions, which are drawn with
+`preserveAspectRatio="none"`. Discrete objects keep `contain` and their
+proportions.
+
 ---
 
 ## Characters

@@ -5,7 +5,7 @@ import { assetDirs } from "@/app/lib/assets";
 /**
  * Painted scenery assets, resolved by convention like covers and characters.
  *
- *   public/scenery/<name>.png
+ *   public/scenery/<name>.webp   (or .png)
  *
  * Every piece of scenery checks here first and falls back to its vector
  * drawing if no painting exists. That makes the upgrade incremental: drop in
@@ -25,19 +25,28 @@ export type SceneryAsset = {
   name: string;
 };
 
-export function resolveScenery(name: string): SceneryAsset | undefined {
-  const relative = `scenery/${name}.png`;
+/**
+ * WebP first: these are large, soft, alpha-heavy paintings, where it runs
+ * about ten times smaller than PNG for no visible loss. PNG still works, so a
+ * freshly painted asset can be dropped straight in and squeezed later.
+ */
+const FORMATS = ["webp", "png"] as const;
 
-  if (!existsSync(join(PUBLIC_DIR, relative))) {
+export function resolveScenery(name: string): SceneryAsset | undefined {
+  const found = FORMATS.find((ext) =>
+    existsSync(join(PUBLIC_DIR, "scenery", `${name}.${ext}`)),
+  );
+
+  if (!found) {
     if (!missing.has(name)) {
       missing.add(name);
       /* Info, not a warning: the vector fallback is a valid state, not a fault. */
       console.log(
-        `[scenery] ${name}: no painting yet (public/${relative}) — drawing the vector version.`,
+        `[scenery] ${name}: no painting yet (public/scenery/${name}.webp) — drawing the vector version.`,
       );
     }
     return undefined;
   }
 
-  return { src: `${assetDirs.scenery}/${name}.png`, name };
+  return { src: `${assetDirs.scenery}/${name}.${found}`, name };
 }

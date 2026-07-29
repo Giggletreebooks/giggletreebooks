@@ -14,12 +14,20 @@ export default function Scenery({
   name,
   alt = "",
   sizes,
+  fit = "contain",
   children,
 }: {
   /** Filename stem under public/scenery, e.g. "tree-oak". */
   name: string;
   alt?: string;
   sizes: string;
+  /**
+   * `contain` for discrete objects — a tree keeps its proportions.
+   * `stretch` for full-width bands: hills, path and the ground grass run edge
+   * to edge in boxes far wider than any painting, exactly like their vector
+   * versions, which are drawn with `preserveAspectRatio="none"`.
+   */
+  fit?: "contain" | "stretch";
   /** Vector fallback, drawn until the painting lands. */
   children: React.ReactNode;
 }) {
@@ -33,7 +41,9 @@ export default function Scenery({
       alt={alt}
       fill
       sizes={sizes}
-      className="object-contain object-bottom"
+      className={
+        fit === "stretch" ? "object-fill" : "object-contain object-bottom"
+      }
       /* Scenery is decorative and below the fold on most pages. */
       loading="lazy"
     />
