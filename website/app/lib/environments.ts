@@ -34,7 +34,10 @@ export type ArtKind =
   | "barn"
   | "fences"
   | "rocks"
-  | "waterfall";
+  | "waterfall"
+  | "sun"
+  | "softHills"
+  | "lushTrees";
 
 export type Palette = {
   /** Wash at the top of the chapter, and what the next chapter fades from. */
@@ -83,21 +86,30 @@ export const ENVIRONMENTS: Record<EnvironmentId, Environment> = {
     label: "The Welcome Forest",
     mood: "Where the Giggle Tree grows.",
     palette: {
-      sky: "#e8f1e4",
-      haze: "#f4ead8",
-      foliage: "#2f6b1f",
-      ground: "#3f7a2a",
-      accent: "#c98a2e",
+      sky: "#e4f0e2",
+      haze: "#fdf3dd",
+      foliage: "#2c6a22",
+      ground: "#4a8a33",
+      accent: "#d99a33",
     },
+    /*
+      The entrance to the world, so it carries the deepest stack: nine layers
+      from the sun down to the flowers at your feet, each travelling at its own
+      rate. Depth here is doing the "wow" — a flat illustration with the same
+      art would read as a background image.
+    */
     layers: [
-      { art: "clouds", depth: 0.1, count: 3, motion: "drift" },
-      { art: "treeline", depth: 0.25, count: 7, motion: "sway", minWidth: "md" },
-      { art: "trees", depth: 0.55, count: 2, motion: "sway", minWidth: "lg" },
-      { art: "leaves", depth: 0.75, count: 5, motion: "fall" },
-      { art: "butterflies", depth: 0.85, count: 2, motion: "flutter", minWidth: "sm" },
-      { art: "grass", depth: 0.9 },
-      { art: "grass", depth: 1, count: 3, motion: "sway" },
-      { art: "flowers", depth: 1, count: 3, motion: "sway", minWidth: "sm" },
+      { art: "sun", depth: 0.04 },
+      { art: "clouds", depth: 0.1, count: 4, motion: "drift" },
+      { art: "birds", depth: 0.16, count: 3, motion: "glide", minWidth: "sm" },
+      { art: "softHills", depth: 0.22 },
+      { art: "treeline", depth: 0.34, count: 9, motion: "sway", minWidth: "md" },
+      { art: "lushTrees", depth: 0.58, count: 2, motion: "sway", minWidth: "lg" },
+      { art: "leaves", depth: 0.76, count: 6, motion: "fall" },
+      { art: "butterflies", depth: 0.86, count: 3, motion: "flutter", minWidth: "sm" },
+      { art: "grass", depth: 0.92 },
+      { art: "grass", depth: 1, count: 4, motion: "sway" },
+      { art: "flowers", depth: 1, count: 5, motion: "sway", minWidth: "sm" },
     ],
   },
   farm: {

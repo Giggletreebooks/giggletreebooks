@@ -8,8 +8,10 @@ export default function Hero() {
   return (
     <Chapter environment="forest" seamTop={false} seamBottom={false}>
 
-      <div className="mx-auto max-w-6xl px-6 py-16 sm:py-24 lg:py-32">
-        <div className="grid items-center gap-12 sm:gap-16 lg:grid-cols-[1.05fr_.95fr] lg:gap-20">
+      <div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:py-32">
+        {/* The media column carries more weight than the text so the logo can
+            grow without the headline losing its measure. */}
+        <div className="grid items-center gap-12 sm:gap-16 lg:grid-cols-[0.9fr_1.2fr] lg:gap-16 xl:gap-20">
           {/* Only the text column reveals — the logo card is the LCP element
               and fading it in would delay Largest Contentful Paint. */}
           <Reveal>
@@ -43,20 +45,41 @@ export default function Hero() {
             </div>
           </Reveal>
 
-          {/* The logo carries the wordmark itself — no text beside it. */}
-          <div className="relative mx-auto w-full max-w-md lg:mx-0 lg:max-w-lg">
-            <div className="absolute inset-0 -rotate-3 rounded-[2rem] border border-border bg-brand-soft/60" />
-            {/*
-              4:3, not the animation's native 16:9. The logo lockup occupies
-              only ~51% of the frame width, so a 16:9 card showed wide dead
-              margins either side of it. A 4:3 card with object-cover crops
-              those margins instead, enlarging the logo about a third without
-              widening the card or unbalancing the hero.
+          {/*
+            The logo stage. 5:4 crops the animation's wide framing so the
+            lockup fills the frame, and the wider column lets it run to
+            max-w-2xl — together about 40% larger than before.
+          */}
+          <div
+            data-hero-stage=""
+            className="relative mx-auto w-full max-w-md sm:max-w-xl lg:mx-0 lg:max-w-2xl"
+          >
+            {/* Soft light behind the glass, bleeding past its edges. */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -inset-10 -z-10 rounded-[50%] blur-3xl"
+              style={{
+                background:
+                  "radial-gradient(closest-side, var(--env-haze), transparent 78%)",
+                opacity: 0.9,
+              }}
+            />
+            {/* Two offset plates behind the stage, for physical depth. */}
+            <div
+              aria-hidden
+              className="absolute inset-0 -rotate-3 rounded-[2.75rem] border border-border/70"
+              style={{ background: "var(--env-sky)", opacity: 0.75 }}
+            />
+            <div
+              aria-hidden
+              className="absolute inset-0 rotate-2 rounded-[2.75rem] border border-border/50 bg-white/60"
+            />
 
-              bg-white because the artwork's dark ink needs a light ground.
-            */}
-            <div className="relative aspect-4/3 overflow-hidden rounded-[2rem] border border-border bg-white shadow-[0_32px_70px_-30px_rgb(59_28_0_/_0.45)]">
-              <HeroLogoVideo />
+            {/* The frame itself: a warm mat around the picture. */}
+            <div className="relative rounded-[2.75rem] border border-border bg-gradient-to-b from-white to-brand-soft/40 p-2.5 shadow-[0_40px_80px_-32px_rgb(59_28_0_/_0.45)] sm:p-3">
+              <div className="relative aspect-5/4 overflow-hidden rounded-[2rem] bg-white ring-1 ring-black/5">
+                <HeroLogoVideo />
+              </div>
             </div>
           </div>
         </div>

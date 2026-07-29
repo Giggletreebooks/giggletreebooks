@@ -398,6 +398,21 @@ body {
   }
 }
 
+/* The hero logo stage drifts, as though the card is resting on air. Slow and
+   shallow — it should register as life, not as movement. */
+[data-hero-stage] {
+  animation: hero-float 9s var(--ease-in-out) infinite alternate;
+}
+
+@keyframes hero-float {
+  from {
+    transform: translate3d(0, 0.5rem, 0);
+  }
+  to {
+    transform: translate3d(0, -0.5rem, 0);
+  }
+}
+
 /* --------------------------------------------------------------------------
    CHARACTERS
    Whole-body idles only, matching the single-cutout artwork spec. Each is
@@ -625,6 +640,7 @@ body {
      motion is the enhancement. */
   [data-decor-item][data-decor-motion],
   [data-waterfall-stream],
+  [data-hero-stage],
   [data-character] {
     animation: none;
     transform: none;

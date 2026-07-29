@@ -1,25 +1,22 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Logo from "@/app/components/Logo";
 import { logoAnimation } from "@/app/lib/assets";
 
 /**
- * The animated logo in the hero card.
+ * The animated logo. Always the video — there is no swap to a different asset.
  *
- * The static logo is always rendered underneath, optimised through
- * `next/image`. It paints immediately, so the card is never empty while the
- * video loads, and it is what remains if the video fails — which means the
- * fallback needs no separate error artwork and no `poster` attribute. A poster
- * would be the raw 2.3MB PNG, since `next/image` cannot optimise that path.
+ * The poster is a frame lifted from the animation itself (its final, fully
+ * drawn lockup), so the card paints instantly and still shows the brand if the
+ * video never arrives. It is the same artwork, not a substitute for it.
  *
- * The video fades in once it can actually play, so a slow connection shows the
- * logo rather than a black rectangle.
+ * Reduced motion gets the animation held on that final frame rather than
+ * looping: the logo is fully present, it simply doesn't move. Removing it
+ * entirely would cost those visitors the brand, and playing it would ignore a
+ * preference they have set deliberately.
  */
 export default function HeroLogoVideo() {
   const ref = useRef<HTMLVideoElement>(null);
-  const [failed, setFailed] = useState(false);
-  const [ready, setReady] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
@@ -34,44 +31,42 @@ export default function HeroLogoVideo() {
     const video = ref.current;
     if (!video) return;
 
-    /* React can drop `muted` from the server-rendered markup, and an unmuted
-       video is refused autoplay. Setting it on the element is the reliable fix. */
+    /* React can drop `muted` from server-rendered markup, and an unmuted video
+       is refused autoplay. Setting it on the element is the reliable fix. */
     video.muted = true;
 
-    /* Autoplay may still be refused by policy — not an error worth showing,
-       the static logo is already visible underneath. */
-    void video.play().catch(() => {});
-  }, [failed, reducedMotion]);
+    if (reducedMotion) {
+      video.pause();
+      /* Hold the finished lockup. Seeking needs metadata, so wait for it. */
+      const seekToEnd = () => {
+        if (video.duration) video.currentTime = Math.max(0, video.duration - 0.05);
+      };
+      if (video.readyState >= 1) seekToEnd();
+      else video.addEventListener("loadedmetadata", seekToEnd, { once: true });
+      return;
+    }
 
-  const showVideo = !failed && !reducedMotion;
+    /* Autoplay may still be refused by policy; the poster frame remains. */
+    void video.play().catch(() => {});
+  }, [reducedMotion]);
 
   return (
-    <div className="relative h-full w-full">
-      <Logo
-        className="absolute inset-0 h-full w-full object-contain p-4 sm:p-5"
-        sizes="(min-width: 1024px) 32rem, 90vw"
-        priority
-      />
-
-      {showVideo && (
-        <video
-          ref={ref}
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-          aria-hidden
-          tabIndex={-1}
-          onCanPlay={() => setReady(true)}
-          onError={() => setFailed(true)}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
-            ready ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <source src={logoAnimation.src} type="video/mp4" />
-        </video>
-      )}
-    </div>
+    <video
+      ref={ref}
+      autoPlay={!reducedMotion}
+      loop={!reducedMotion}
+      muted
+      playsInline
+      preload="metadata"
+      poster={logoAnimation.poster}
+      aria-label="Giggle Tree Books"
+      role="img"
+      tabIndex={-1}
+      /* No fade-in: the poster is rendered by this element, so fading from
+         zero would hide it and leave the card blank while the video loads. */
+      className="h-full w-full object-cover"
+    >
+      <source src={logoAnimation.src} type="video/mp4" />
+    </video>
   );
 }

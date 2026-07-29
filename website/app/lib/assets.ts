@@ -43,6 +43,12 @@ export const logo = {
  */
 export const logoAnimation = {
   src: `${assetDirs.branding}/logo-animation.mp4`,
+  /**
+   * The animation's own final frame. Used as the video poster so the card
+   * paints instantly and still shows the brand if the video never loads —
+   * the same artwork rather than a different logo standing in for it.
+   */
+  poster: `${assetDirs.branding}/logo-animation-poster.jpg`,
   width: 1280,
   height: 720,
 } as const;

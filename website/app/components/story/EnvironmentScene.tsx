@@ -6,9 +6,12 @@ import Fence from "@/app/components/decor/art/Fence";
 import Flower from "@/app/components/decor/art/Flower";
 import Grass from "@/app/components/decor/art/Grass";
 import Hills from "@/app/components/decor/art/Hills";
+import HillsSoft from "@/app/components/decor/art/HillsSoft";
 import Leaf from "@/app/components/decor/art/Leaf";
 import Rocks from "@/app/components/decor/art/Rocks";
+import SunGlow from "@/app/components/decor/art/SunGlow";
 import Tree from "@/app/components/decor/art/Tree";
+import TreeLush from "@/app/components/decor/art/TreeLush";
 import Waterfall from "@/app/components/decor/art/Waterfall";
 import DecorItem from "@/app/components/decor/DecorItem";
 import DecorLayer from "@/app/components/decor/DecorLayer";
@@ -102,6 +105,49 @@ function renderLayer(layer: LayerSpec) {
           }}
         >
           <Cloud className="h-full w-full" />
+        </DecorItem>
+      ));
+
+    case "sun":
+      return (
+        <DecorItem
+          motion="float"
+          duration={26}
+          drift="0.75rem"
+          className="-top-32 -left-24 h-[34rem] w-[34rem] sm:-top-40 sm:-left-16"
+          style={{ color: "var(--env-haze)", opacity: 0.85 }}
+        >
+          <SunGlow className="h-full w-full" />
+        </DecorItem>
+      );
+
+    case "softHills":
+      return (
+        <DecorItem
+          className="inset-x-0 bottom-0 h-40 sm:h-56 lg:h-64"
+          style={{ color: "var(--env-ground)", opacity: 0.2 }}
+        >
+          <HillsSoft className="h-full w-full" />
+        </DecorItem>
+      );
+
+    case "lushTrees":
+      return items.map((i) => (
+        <DecorItem
+          key={i}
+          motion={layer.motion}
+          duration={vary(11, i, 2.6)}
+          delay={-i * 5}
+          angle="0.9deg"
+          className="bottom-[2%] h-80 w-60 xl:h-96 xl:w-72"
+          style={{
+            /* Outer edges only, so the headline column stays clear. */
+            [i % 2 === 0 ? "left" : "right"]: "-4rem",
+            color: "var(--env-foliage)",
+            opacity: 0.26,
+          }}
+        >
+          <TreeLush className="h-full w-full" />
         </DecorItem>
       ));
 
