@@ -30,6 +30,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={`${geistSans.variable} ${fraunces.variable} h-full antialiased`}
+      /* The script below stamps data-motion on this element before React
+         hydrates, which React otherwise reports as a mismatch. */
+      suppressHydrationWarning
     >
       <head>
         {/*

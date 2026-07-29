@@ -63,16 +63,14 @@ export default function SceneDefs() {
           <stop offset="100%" stopColor="#2a3d1c" stopOpacity="0" />
         </radialGradient>
 
-        <radialGradient id="gt-sun-core">
-          <stop offset="0%" stopColor="currentColor" stopOpacity="0.9" />
-          <stop offset="45%" stopColor="currentColor" stopOpacity="0.35" />
-          <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
-        </radialGradient>
-
-        <linearGradient id="gt-sun-ray" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="currentColor" stopOpacity="0.35" />
-          <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
-        </linearGradient>
+        {/*
+          The sun's gradient is NOT here, for the reason stated above: it is
+          the one gradient that must take the world's colour, so it lives in
+          SunGlow where `currentColor` is the warm haze. A copy here duplicated
+          the id, and a duplicate id wins by document order — so every sun on
+          the site resolved `currentColor` against this element's inherited
+          text brown and painted a dark stain instead of light.
+        */}
       </defs>
     </svg>
   );

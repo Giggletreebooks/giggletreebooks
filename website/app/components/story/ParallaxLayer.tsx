@@ -26,7 +26,10 @@ export default function ParallaxLayer({
   return (
     <div
       data-parallax=""
-      className={`absolute inset-0 ${className ?? ""}`}
+      /* `bottom` is left to globals.css: when the layer travels, it hangs
+         below the chapter by exactly its travel distance, and when it cannot
+         travel it sits flush. Both cases keep the ground on the bottom edge. */
+      className={`absolute inset-x-0 top-0 ${className ?? ""}`}
       style={{ "--depth": depth } as CSSProperties}
     >
       {children}

@@ -76,6 +76,9 @@ body {
   /* Gap between staggered siblings; multiplied by --stagger on each item. */
   --stagger-step: 60ms;
 
+  /* How far the nearest parallax layer travels as its chapter passes. */
+  --parallax-travel: 7vh;
+
   /* Card interaction. Components read these, so a future tilt/parallax layer
      only has to write them — no component changes. */
   --card-lift: -4px;
@@ -131,7 +134,11 @@ body {
   position: absolute;
   inset: 0;
   z-index: -10;
-  overflow: hidden;
+  /* clip, not hidden: `overflow: hidden` makes this a scroll container, and a
+     view() timeline resolves against the subject's nearest scroll container.
+     With hidden, every parallax layer measured itself against this box, which
+     never scrolls, and froze at 50% progress — no travel, ever. */
+  overflow: clip;
   pointer-events: none;
 }
 
@@ -333,7 +340,9 @@ body {
 [data-chapter] {
   position: relative;
   isolation: isolate;
-  overflow: hidden;
+  /* clip, not hidden — see [data-decor]: hidden would capture the parallax
+     view timelines and hold them still. */
+  overflow: clip;
   background: linear-gradient(
     to bottom,
     var(--env-sky) 0%,
@@ -378,9 +387,18 @@ body {
 
   --depth: 0 = infinitely far (no travel), 1 = closest (most travel).
 */
+/* Flush with the chapter unless the layer can actually travel. */
+[data-parallax] {
+  bottom: 0;
+}
+
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     [data-parallax] {
+      /* Hang below the chapter by exactly the travel distance, so travelling
+         up slides art that was below the fold into view instead of lifting
+         the ground band off the bottom edge. */
+      bottom: calc(var(--depth, 0.5) * var(--parallax-travel) * -1);
       animation: parallax-travel linear both;
       animation-timeline: view();
       animation-range: cover 0% cover 100%;
@@ -389,12 +407,22 @@ body {
   }
 }
 
+/*
+  Travel is upward only, and every layer hangs below its chapter by exactly
+  the distance it can travel (see ParallaxLayer). A symmetric ±travel looks
+  identical but lifts ground-anchored art clean off the bottom edge halfway
+  through, leaving a bare strip under the grass.
+*/
 @keyframes parallax-travel {
   from {
-    transform: translate3d(0, calc(var(--depth, 0.5) * 7vh), 0);
+    transform: none;
   }
   to {
-    transform: translate3d(0, calc(var(--depth, 0.5) * -7vh), 0);
+    transform: translate3d(
+      0,
+      calc(var(--depth, 0.5) * var(--parallax-travel) * -1),
+      0
+    );
   }
 }
 

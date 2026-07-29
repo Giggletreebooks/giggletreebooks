@@ -100,11 +100,24 @@ function renderLayer(layer: LayerSpec) {
           motion={layer.motion}
           duration={150 + i * 30}
           delay={-40 * (i + 1)}
-          /* Explicit height: a painted cloud fills its box, and a box with
-             only a width would be zero tall. */
-          className="left-0 h-[4.5rem] w-32 sm:h-[6.75rem] sm:w-48"
+          /*
+            Explicit height: a painted cloud fills its box, and a box with
+            only a width would be zero tall.
+
+            A phone gets one cloud. Its sky is barely wider than a single
+            cloud and barely taller, so a full set crosses the headline
+            instead of sitting behind it.
+          */
+          className={`h-[4.5rem] w-28 sm:h-[6.75rem] sm:w-48 ${i > 0 ? "hidden sm:block" : ""}`}
           style={{
-            top: `${5 + i * 9}%`,
+            /* Spread across the sky. Drift only travels a cloud's own width,
+               so clouds parked at a shared edge stay stacked on each other —
+               four copies of one painting piled up read as a smudge. */
+            left: spread(count, i),
+            /* Fixed offsets, not percentages: clouds belong near the top of
+               the sky. A percentage walks them down a tall chapter and parks
+               them on the headline. */
+            top: `${1.5 + i * 3.5}rem`,
             color: "var(--surface)",
             opacity: 0.75 - i * 0.12,
           }}
@@ -210,7 +223,9 @@ function renderLayer(layer: LayerSpec) {
           className="inset-x-0 bottom-0 h-24 sm:h-32"
           style={{ color: "var(--env-ground)", opacity: 0.16 }}
         >
-          <Hills className="h-full w-full" />
+          <Scenery name="hills" sizes="100vw" fit="stretch">
+            <Hills className="h-full w-full" />
+          </Scenery>
         </DecorItem>
       );
 
@@ -326,7 +341,9 @@ function renderLayer(layer: LayerSpec) {
           className="inset-x-0 bottom-[6%] h-10 sm:h-12"
           style={{ color: "var(--env-ground)", opacity: 0.2 }}
         >
-          <Fence className="h-full w-full" />
+          <Scenery name="fence" sizes="100vw" fit="stretch">
+            <Fence className="h-full w-full" />
+          </Scenery>
         </DecorItem>
       );
 
