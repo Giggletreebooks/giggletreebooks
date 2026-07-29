@@ -8,7 +8,10 @@ export default function Hero() {
   return (
     <Chapter environment="forest" seamTop={false} seamBottom={false}>
 
-      <div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:py-32">
+      {/* max-w-6xl, like the masthead and every chapter below. At 7xl the
+          headline sat 64px left of everything else on the page, including the
+          logo directly above it. */}
+      <div className="mx-auto max-w-6xl px-6 py-16 sm:py-24 lg:py-32">
         {/* The media column carries more weight than the text so the logo can
             grow without the headline losing its measure. */}
         <div className="grid items-center gap-12 sm:gap-16 lg:grid-cols-[0.9fr_1.2fr] lg:gap-16 xl:gap-20">
