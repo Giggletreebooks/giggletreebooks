@@ -32,8 +32,13 @@ export default function SmoothScroll() {
       if (cancelled) return;
 
       lenis = new Lenis({
-        /* Long enough to glide, short enough not to feel laggy. */
-        lerp: 0.09,
+        /*
+          Long enough to glide, short enough not to feel laggy. Eased down a
+          little from 0.09: the page is a landscape you move through rather
+          than a document you page down, and the extra weight is what makes
+          crossing from one world into the next feel travelled.
+        */
+        lerp: 0.075,
         wheelMultiplier: 1,
         /* Touch keeps native scrolling — phones already have their own inertia. */
         smoothWheel: true,

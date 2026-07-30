@@ -140,6 +140,16 @@ body {
      never scrolls, and froze at 50% progress — no travel, ever. */
   overflow: clip;
   pointer-events: none;
+  /*
+    The scenery dissolves at the foot of its own chapter instead of being cut
+    by the chapter's edge. This is what a seam gradient could never fix: a
+    colour wash laid over a clipped illustration still has clipped artwork
+    underneath it, and a ground band ending on a straight line reads as two
+    stacked boxes however softly it is tinted. Fading the art itself is what
+    lets one world become the next.
+  */
+  -webkit-mask-image: linear-gradient(to bottom, #000 76%, transparent 99%);
+  mask-image: linear-gradient(to bottom, #000 76%, transparent 99%);
 }
 
 /* The near field, painted over the content rather than under it. Content sits
@@ -372,16 +382,29 @@ body {
      two-stop sky has no light source in it; this gives the scene somewhere
      for the sun to be and warms the ground plane it stands on. */
   background:
+    /* Held off the very bottom edge. Pooled at 100% it warmed each chapter's
+       foot, which then met the next world's cool sky and drew the line the
+       seams were supposed to remove — the glow itself was the last mismatch.
+       Ending at 88% leaves the final stretch on the chapter's own tint, which
+       is exactly what the next chapter's top seam fades from. */
     radial-gradient(
-      130% 52% at 50% 100%,
+      130% 48% at 50% 88%,
       color-mix(in oklab, var(--env-haze) 62%, transparent) 0%,
-      transparent 72%
+      transparent 74%
     ),
     linear-gradient(
       to bottom,
       var(--env-sky) 0%,
       color-mix(in oklab, var(--env-sky) 35%, var(--background)) 45%,
-      var(--background) 100%
+      /*
+        A chapter ends in a tint of its own sky, not in page cream. Washing
+        every world out to paper put a cream band between each pair of them —
+        world, paper, world — which is the "two boxes with a gap" the seams
+        were introduced to prevent, reintroduced underneath the seams. Ending
+        on its own colour lets the next chapter's top seam, which fades from
+        this sky, carry the handover.
+      */
+      color-mix(in oklab, var(--env-sky) 50%, var(--background)) 100%
     );
 }
 
@@ -449,25 +472,51 @@ body {
 [data-chapter-seam] {
   position: absolute;
   inset-inline: 0;
-  height: 6rem;
+  /* A passage, not a line. At 6rem the handover happened inside a hundred
+     pixels and read as a band; over a sixth of the viewport it reads as
+     distance. */
+  height: 16vh;
   pointer-events: none;
   z-index: 1;
 }
 
 [data-chapter-seam="top"] {
   top: 0;
-  /* Fades from the previous world's sky, so chapters cross-dissolve into each
-     other rather than both washing out to page background between them. */
+  /*
+    Starts on the colour the previous chapter actually *ends* on, which is not
+    its sky. A chapter's foot is its sky already mixed halfway to paper, so
+    fading in from the raw sky jumped straight to a colour the eye had not
+    seen since the top of the last world — the step at every boundary. Same
+    mix here, and the two meet on the same value.
+  */
   background: linear-gradient(
     to bottom,
-    var(--from-sky, var(--background)),
+    color-mix(
+      in oklab,
+      var(--from-sky, var(--background)) 50%,
+      var(--background)
+    ),
     transparent
   );
 }
 
+/*
+  Fades to this chapter's own foot colour, not to page cream.
+
+  Washing to cream was the band. Between two worlds it painted the outgoing
+  one's foot to paper, and then the next chapter's top seam faded in from a
+  different colour entirely — so every boundary went world, cream, world, with
+  two seams pulling opposite ways. Landing on the colour the chapter's own
+  background already ends on makes this invisible between worlds and leaves the
+  top seam to carry the handover on its own.
+*/
 [data-chapter-seam="bottom"] {
   bottom: 0;
-  background: linear-gradient(to top, var(--background), transparent);
+  background: linear-gradient(
+    to top,
+    color-mix(in oklab, var(--env-sky) 50%, var(--background)),
+    transparent
+  );
 }
 
 /*
